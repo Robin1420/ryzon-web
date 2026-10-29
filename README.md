@@ -33,4 +33,4 @@ Logo: `packages/ui/src/atoms/Logo.tsx` (favicon en `apps/web/src/app/icon.svg`).
 ## Créditos
 
 Modelo 3D «Server V2 +console» de [FlevasGR](https://sketchfab.com/FlevasGR), licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) (`apps/web/public/models/server-rack.glb`).
-Está adaptado: el gabinete se reemplaza por un material liso para quitar la marca original (`apps/web/src/logic/engines/rackModel.ts`). El crédito se muestra en el pie de la web.
+Está adaptado: el gabinete se reemplaza por un material liso para quitar la marca original (`apps/web/src/logic/engines/rackModel.ts`). El crédito se muestra en la esquina del diagrama 3D de Servicios (`ModelCredit`).

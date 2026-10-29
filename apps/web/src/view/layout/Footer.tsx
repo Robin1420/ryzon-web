@@ -1,6 +1,5 @@
 import { BrandMark, Mono } from "@ryzon/ui";
 import { footer, nav } from "@/data/site";
-import { ModelCredit } from "./ModelCredit";
 import s from "./Footer.module.css";
 
 export function Footer() {
@@ -15,7 +14,6 @@ export function Footer() {
         </div>
         <div className={s.big} aria-hidden="true">RYZON</div>
         <div className={s.row}><Mono>{footer.legal}</Mono><Mono>{footer.tagline}</Mono></div>
-        <ModelCredit className={s.credit} />
       </div>
     </footer>
   );
