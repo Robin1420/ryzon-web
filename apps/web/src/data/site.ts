@@ -60,6 +60,9 @@ export const contact = {
   ],
 };
 
+/** WhatsApp que recibe los mensajes del formulario. Número con código de país (Perú, +51), sin símbolos. */
+export const whatsapp = { number: "51931320429" };
+
 export const form = {
   fields: {
     name: "Nombre",
@@ -70,14 +73,22 @@ export const form = {
   },
   undecided: "Aún no lo sé",
   submit: "Enviar mensaje",
-  note: "Respondemos a cada mensaje.",
+  note: "Se abrirá WhatsApp con tu mensaje listo para enviar.",
   errors: {
     name: "Escribe tu nombre.",
     email: "Escribe un correo válido, por ejemplo nombre@empresa.com.",
     message: "Cuéntanos brevemente qué necesitas.",
   },
   invalidSummary: "Revisa los campos marcados para poder enviar.",
-  demo: "Formulario en modo de demostración: el envío todavía no está conectado [servicio de envío pendiente].",
+  opened: "Abrimos WhatsApp con tu mensaje. Si no se abrió,",
+  openLink: "ábrelo aquí",
+  message: {
+    greeting: "Hola, quiero hablar de un proyecto con Ryzon.",
+    name: "Nombre",
+    email: "Correo",
+    company: "Empresa",
+    area: "Me interesa",
+  },
 };
 
 export const footer = {

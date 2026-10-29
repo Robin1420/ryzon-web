@@ -5,3 +5,4 @@
 .status { min-height: 1.5em; font-size: 0.9rem; color: var(--rz-fg-soft); margin: 18px 0 0; }
 @media (max-width: 1000px) { .form { grid-column: 1 / -1; } }
 @media (max-width: 899px) { .row { grid-template-columns: 1fr; } }
+.status a { text-decoration: underline; text-underline-offset: 3px; color: #fff; }

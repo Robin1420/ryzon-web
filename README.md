@@ -29,7 +29,7 @@ Flujo: `data` → `view` (renderiza) ← `logic` (anima y reacciona). Los `data-
 ## Pendientes (datos no confirmados)
 
 Contenido en `apps/web/src/data/site.ts` con espacios reservados `[correo de contacto]`, `[teléfono]`, `[ciudad]`, `[horario]`, `[razón social]`.
-Logo: `packages/ui/src/atoms/Logo.tsx` (favicon en `apps/web/src/app/icon.svg`). Envío del formulario: `apps/web/src/logic/services/contactService.ts`.
+Logo: `packages/ui/src/atoms/Logo.tsx` (favicon en `apps/web/src/app/icon.svg`). El formulario abre WhatsApp (número en `apps/web/src/data/site.ts`, mensaje en `logic/services/contactService.ts`).
 
 ## Créditos
 

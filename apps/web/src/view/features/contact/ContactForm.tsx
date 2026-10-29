@@ -6,7 +6,7 @@ import { useContactForm } from "@/logic/hooks/useContactForm";
 import s from "./ContactForm.module.css";
 
 export function ContactForm() {
-  const { values, errors, status, onChange, onBlur, onSubmit } = useContactForm();
+  const { values, errors, status, waUrl, onChange, onBlur, onSubmit } = useContactForm();
   const f = copy.fields;
   return (
     <form className={s.form} onSubmit={onSubmit} noValidate>
@@ -38,7 +38,10 @@ export function ContactForm() {
         <Button variant="solid" type="submit" magnetic>{copy.submit}</Button>
         <Mono>{copy.note}</Mono>
       </div>
-      <p className={s.status} role="status" aria-live="polite">{status}</p>
+      <p className={s.status} role="status" aria-live="polite">
+        {status}
+        {waUrl && <> <a href={waUrl} target="_blank" rel="noopener noreferrer">{copy.openLink}</a>.</>}
+      </p>
     </form>
   );
 }
