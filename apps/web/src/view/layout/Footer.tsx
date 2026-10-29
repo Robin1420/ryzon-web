@@ -14,6 +14,12 @@ export function Footer() {
         </div>
         <div className={s.big} aria-hidden="true">RYZON</div>
         <div className={s.row}><Mono>{footer.legal}</Mono><Mono>{footer.tagline}</Mono></div>
+        <Mono className={s.credit}>
+          {footer.credit.before}
+          <a href={footer.credit.url} target="_blank" rel="noopener noreferrer">{footer.credit.title}</a>
+          {footer.credit.after}
+          <a href={footer.credit.licenseUrl} target="_blank" rel="noopener noreferrer">{footer.credit.license}</a>.
+        </Mono>
       </div>
     </footer>
   );

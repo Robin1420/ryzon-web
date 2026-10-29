@@ -29,3 +29,8 @@ Flujo: `data` → `view` (renderiza) ← `logic` (anima y reacciona). Los `data-
 
 Contenido en `apps/web/src/data/site.ts` con espacios reservados `[correo de contacto]`, `[teléfono]`, `[ciudad]`, `[horario]`, `[razón social]`.
 Logo: `packages/ui/src/atoms/Logo.tsx` (favicon en `apps/web/src/app/icon.svg`). Envío del formulario: `apps/web/src/logic/services/contactService.ts`.
+
+## Créditos
+
+Modelo 3D «Server V2 +console» de [FlevasGR](https://sketchfab.com/FlevasGR), licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) (`apps/web/public/models/server-rack.glb`).
+Está adaptado: el gabinete se reemplaza por un material liso para quitar la marca original (`apps/web/src/logic/engines/rackModel.ts`). El crédito se muestra en el pie de la web.
