@@ -1,0 +1,3 @@
+.text { color: var(--rz-fg-soft); max-width: 30em; }
+.lead { font-size: clamp(1rem, 0.95rem + 0.35vw, 1.3rem); max-width: 36em; }
+.muted { color: var(--rz-mut); }

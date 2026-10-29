@@ -1,0 +1,19 @@
+.hero { position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; padding-top: var(--rz-nav-h); }
+.canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hero::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(120% 90% at 78% 28%, transparent 0, rgba(5, 5, 5, 0.15) 45%, rgba(5, 5, 5, 0.88) 100%), linear-gradient(to top, rgba(5, 5, 5, 0.92) 0, transparent 55%); }
+.top { position: absolute; z-index: 2; top: calc(var(--rz-nav-h) + 26px); left: var(--rz-pad); right: var(--rz-pad); display: flex; justify-content: space-between; }
+.in { position: relative; z-index: 2; width: 100%; max-width: var(--rz-max); margin-inline: auto; padding: 0 var(--rz-pad) clamp(28px, 5vh, 56px); }
+.title { margin-bottom: clamp(22px, 3.5vh, 40px); }
+.row { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 40px; align-items: end; }
+.sub { margin-bottom: 34px; color: #d6d6d6; }
+.areas { border-top: 1px solid var(--rz-line); }
+.areasLabel { padding: 10px 0; }
+.areas button { display: flex; gap: 18px; align-items: baseline; width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--rz-line-2); padding: 12px 0; font-family: var(--rz-font-mono); font-size: 0.8rem; color: var(--rz-mut); transition: color 0.25s, padding 0.35s; }
+.areas button span:first-child { color: var(--rz-dim); transition: color 0.25s; }
+.areas button:hover { color: #fff; padding-left: 12px; }
+.areas button:hover span:first-child { color: var(--rz-red); }
+.hint { position: absolute; z-index: 2; left: 50%; bottom: 0; width: 1px; height: 46px; background: var(--rz-line); overflow: hidden; }
+.hint::after { content: ""; position: absolute; left: 0; top: -100%; width: 1px; height: 100%; background: #fff; animation: sh 2.2s infinite cubic-bezier(0.6, 0, 0.3, 1); }
+@keyframes sh { to { top: 100%; } }
+@media (max-width: 1000px) { .row { grid-template-columns: 1fr; gap: 28px; } .areas { display: none; } }
+@media (prefers-reduced-motion: reduce) { .hint::after { animation: none; } }

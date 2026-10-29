@@ -1,0 +1,4 @@
+.heading { font-family: var(--rz-font-display); font-weight: 800; font-stretch: 114%; letter-spacing: -0.035em; line-height: 0.93; }
+.hero { font-size: clamp(2.7rem, 7.6vw, 8rem); max-width: 10.6em; }
+.section { font-size: clamp(2.3rem, 5.6vw, 5.6rem); }
+.panel { font-stretch: 112%; letter-spacing: -0.03em; line-height: 1; font-size: clamp(1.7rem, 3.1vw, 3.2rem); }

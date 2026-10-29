@@ -1,0 +1,7 @@
+.line { fill: none; stroke: rgba(255, 255, 255, 0.65); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+.solid { fill: #f1f1f1; }
+.dark { fill: #1a1a1a; stroke: rgba(255, 255, 255, 0.5); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.red { fill: rgba(244, 6, 18, 0.08); stroke: var(--rz-red); stroke-width: 1.6; vector-effect: non-scaling-stroke; }
+.faint { fill: none; stroke: rgba(255, 255, 255, 0.2); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.dash { stroke-dasharray: 3 6; }
+.redFill { fill: var(--rz-red); }

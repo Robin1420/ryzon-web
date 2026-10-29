@@ -1,0 +1,15 @@
+.section { padding-block: clamp(120px, 20vh, 240px) clamp(80px, 12vh, 160px); border-top: 1px solid var(--rz-line-2); }
+.wrap { padding-inline: var(--rz-pad); max-width: var(--rz-max); margin-inline: auto; }
+.head { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; margin-bottom: clamp(60px, 12vh, 140px); }
+.headLabel { grid-column: 1 / -1; }
+.headTitle { grid-column: 1 / 11; }
+.row { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; align-items: center; padding-block: clamp(36px, 8vh, 90px); border-top: 1px solid var(--rz-line); }
+.text { grid-column: 1 / 6; }
+.fig { grid-column: 6 / -1; }
+.rev .text { grid-column: 8 / -1; grid-row: 1; }
+.rev .fig { grid-column: 1 / 8; grid-row: 1; }
+.title { font-family: var(--rz-font-display); font-weight: 800; font-stretch: 112%; letter-spacing: -0.03em; line-height: 1; font-size: clamp(1.7rem, 3.2vw, 3.2rem); margin: 16px 0 22px; }
+@media (max-width: 1000px) {
+  .headTitle { grid-column: 1 / -1; }
+  .text, .fig, .rev .text, .rev .fig { grid-column: 1 / -1; grid-row: auto; }
+}

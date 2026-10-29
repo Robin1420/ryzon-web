@@ -1,0 +1,37 @@
+"use client";
+import { useState, type ChangeEvent, type FormEvent } from "react";
+import { form as copy } from "@/data/site";
+import { submitContact } from "../services/contactService";
+import { emptyContact, isValid, validateAll, type ContactErrors, type ContactValues } from "../validation/contactRules";
+
+export function useContactForm() {
+  const [values, setValues] = useState<ContactValues>(emptyContact);
+  const [errors, setErrors] = useState<ContactErrors>({});
+  const [status, setStatus] = useState("");
+
+  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setValues((v) => ({ ...v, [name]: value }));
+    if (name in errors && isValid(name as keyof ContactErrors, value)) setErrors((er) => ({ ...er, [name]: undefined }));
+  };
+  const onBlur = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const name = e.target.name as keyof ContactErrors;
+    setErrors((er) => ({ ...er, [name]: isValid(name, values[name]) ? undefined : true }));
+  };
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const found = validateAll(values);
+    setErrors(found);
+    if (Object.keys(found).length) {
+      setStatus(copy.invalidSummary);
+      const first = Object.keys(found)[0];
+      (e.currentTarget.elements.namedItem(first) as HTMLElement | null)?.focus();
+      return;
+    }
+    const result = await submitContact(values);
+    setStatus(result.ok ? "" : copy.demo);
+  };
+
+  return { values, errors, status, onChange, onBlur, onSubmit };
+}

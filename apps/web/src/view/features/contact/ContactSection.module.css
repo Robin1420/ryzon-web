@@ -1,0 +1,6 @@
+.section { position: relative; z-index: 1; padding-block: clamp(60px, 12vh, 150px) clamp(80px, 14vh, 170px); }
+.grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; padding-inline: var(--rz-pad); max-width: var(--rz-max); margin-inline: auto; }
+.copy { grid-column: 1 / 6; }
+.title { margin: 16px 0 24px; font-size: clamp(2.3rem, 4.8vw, 5rem); }
+.channels { margin-top: clamp(30px, 6vh, 60px); }
+@media (max-width: 1000px) { .copy { grid-column: 1 / -1; } }

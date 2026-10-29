@@ -1,0 +1,15 @@
+.nav { position: fixed; left: 0; right: 0; top: 0; height: var(--rz-nav-h); z-index: 110; display: flex; align-items: center; justify-content: space-between; padding-inline: var(--rz-pad); background: rgba(5, 5, 5, 0.72); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--rz-line-2); }
+.links { display: flex; gap: clamp(18px, 3vw, 44px); list-style: none; margin: 0; padding: 0; }
+.cta { font-family: var(--rz-font-mono); font-size: 0.76rem; border: 1px solid var(--rz-line); padding: 11px 18px; transition: background 0.3s, color 0.3s, border-color 0.3s; }
+.cta:hover { background: #fff; color: #000; border-color: #fff; }
+.burger { display: none; width: 44px; height: 44px; border: 1px solid var(--rz-line); background: none; position: relative; }
+.burger i { position: absolute; left: 12px; right: 12px; height: 1px; background: #fff; transition: transform 0.35s, top 0.35s; }
+.burger i:nth-child(1) { top: 18px; }
+.burger i:nth-child(2) { top: 25px; }
+.burger[aria-expanded="true"] i:nth-child(1) { top: 21px; transform: rotate(45deg); }
+.burger[aria-expanded="true"] i:nth-child(2) { top: 21px; transform: rotate(-45deg); }
+.menu { position: fixed; inset: 0; z-index: 105; background: var(--rz-bg); padding: calc(var(--rz-nav-h) + 40px) var(--rz-pad) 40px; display: flex; flex-direction: column; justify-content: space-between; visibility: hidden; opacity: 0; transition: opacity 0.35s, visibility 0.35s; }
+.open { visibility: visible; opacity: 1; }
+.big { display: block; font-family: var(--rz-font-display); font-weight: 800; font-stretch: 114%; font-size: clamp(2.2rem, 11vw, 3.6rem); letter-spacing: -0.03em; line-height: 1.1; padding: 10px 0; border-bottom: 1px solid var(--rz-line-2); }
+@media (min-width: 1001px) { .menu { display: none; } }
+@media (max-width: 1000px) { .links, .cta { display: none; } .burger { display: block; } }

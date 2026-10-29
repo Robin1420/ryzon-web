@@ -1,0 +1,15 @@
+import s from "./Logo.module.css";
+
+/** Marca de Ryzon: cuatro barras inclinadas. SVG simplificado a partir de RyzonLogo.svg (mismas formas y color). */
+export function Logo({ height = 38 }: { height?: number }) {
+  return (
+    <svg className={s.logo} viewBox="42 0 291 375" height={height} width={(height * 291) / 375} aria-hidden="true" focusable="false">
+      <g fill="#F20611">
+        <polygon points="42.61,102.58 96.75,70.52 96.75,308.26 42.61,276.2" />
+        <polygon points="136.67,31.61 136.67,209.94 192.27,178.32 192.27,0" />
+        <polygon points="181.43,186.64 181.43,375 237.03,343.38 237.03,155.03" />
+        <polygon points="332.38,102.59 332.38,276.21 278.24,308.27 278.24,70.53" />
+      </g>
+    </svg>
+  );
+}

@@ -1,0 +1,2 @@
+.cols { position: fixed; inset: 0; z-index: 0; pointer-events: none; display: flex; justify-content: space-between; padding-inline: var(--rz-pad); }
+.cols span { width: 1px; background: var(--rz-line-2); }

@@ -1,0 +1,22 @@
+/* Fuente de verdad visual de Ryzon: negro, escala de grises y un único acento rojo. */
+:root {
+  --rz-bg: #050505;
+  --rz-bg-2: #0b0b0b;
+  --rz-fg: #f4f4f4;
+  --rz-fg-soft: #d0d0d0;
+  --rz-mut: #a8a8a8;
+  --rz-dim: #6e6e6e;
+  --rz-line: rgba(255, 255, 255, 0.18);
+  --rz-line-2: rgba(255, 255, 255, 0.08);
+  --rz-red: #f40612;
+
+  --rz-font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --rz-font-body: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  --rz-font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  --rz-pad: clamp(20px, 4vw, 64px);
+  --rz-nav-h: 68px;
+  --rz-max: 1680px;
+
+  --rz-ease-out: cubic-bezier(0.7, 0, 0.2, 1);
+}

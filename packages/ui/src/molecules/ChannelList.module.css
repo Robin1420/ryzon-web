@@ -1,0 +1,4 @@
+.list { margin: 0; border-top: 1px solid var(--rz-line); }
+.row { display: flex; justify-content: space-between; gap: 20px; padding: 14px 0; border-bottom: 1px solid var(--rz-line-2); }
+.row dt { font-family: var(--rz-font-mono); font-size: 0.74rem; color: var(--rz-mut); }
+.row dd { margin: 0; font-size: 0.98rem; text-align: right; }

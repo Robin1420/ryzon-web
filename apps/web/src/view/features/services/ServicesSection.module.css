@@ -1,0 +1,47 @@
+.intro { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; padding: clamp(110px, 18vh, 220px) var(--rz-pad) clamp(60px, 10vh, 120px); max-width: var(--rz-max); margin-inline: auto; }
+.introLabel { grid-column: 1 / -1; }
+.introTitle { grid-column: 1 / 10; }
+.introText { grid-column: 8 / -1; margin-top: 12px; }
+.stage { position: relative; border-top: 1px solid var(--rz-line-2); }
+.frame { height: 100svh; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(20px, 3vw, 56px); padding: calc(var(--rz-nav-h) + 16px) var(--rz-pad) 28px; max-width: var(--rz-max); margin-inline: auto; }
+.copy { display: flex; flex-direction: column; justify-content: space-between; min-height: 0; }
+.count { display: flex; align-items: baseline; gap: 12px; }
+.count b { font-family: var(--rz-font-display); font-weight: 800; font-stretch: 114%; font-size: clamp(2rem, 3.4vw, 3.4rem); letter-spacing: -0.04em; line-height: 1; }
+.panels { position: relative; flex: 1; min-height: clamp(250px, 40vh, 420px); margin-block: 18px; }
+.panel { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; }
+.panelTitle { font-family: var(--rz-font-display); font-weight: 800; font-stretch: 112%; letter-spacing: -0.03em; line-height: 1; font-size: clamp(1.7rem, 3.1vw, 3.2rem); margin: 14px 0 18px; }
+.benefit { margin: 18px 0 0; padding-top: 14px; border-top: 1px solid var(--rz-line); font-size: 0.95rem; max-width: 30em; }
+.benefitLabel { display: block; margin-bottom: 4px; }
+.note { margin-top: 12px; max-width: 32em; }
+.tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.diagram { position: relative; border: 1px solid var(--rz-line); background: rgba(255, 255, 255, 0.012); min-height: 0; display: flex; }
+.diagram::before, .diagram::after { content: ""; position: absolute; width: 14px; height: 14px; border: 1px solid #fff; }
+.diagram::before { left: -1px; top: -1px; border-right: 0; border-bottom: 0; }
+.diagram::after { right: -1px; bottom: -1px; border-left: 0; border-top: 0; }
+.diagramTop { position: absolute; left: 16px; right: 16px; top: 12px; display: flex; justify-content: space-between; z-index: 2; }
+.caps { position: absolute; left: 16px; right: 16px; bottom: 12px; height: 1.4em; z-index: 2; font-family: var(--rz-font-mono); font-size: 0.74rem; color: var(--rz-mut); }
+.cap { position: absolute; left: 0; bottom: 0; display: flex; align-items: center; gap: 0.7em; }
+.cap i { width: 7px; height: 7px; background: var(--rz-dim); }
+.alert i { background: var(--rz-red); }
+.ok i { background: #fff; }
+
+@media (max-width: 1000px) { .introTitle, .introText { grid-column: 1 / -1; } }
+@media (max-width: 899px) {
+  .frame { grid-template-columns: 1fr; grid-template-rows: minmax(0, 38svh) minmax(0, 1fr); gap: 12px; padding-top: calc(var(--rz-nav-h) + 8px); padding-bottom: 14px; }
+  .diagram { order: -1; }
+  .panels { min-height: 0; margin-block: 8px; }
+  .panelTitle { font-size: 1.45rem; margin: 8px 0 10px; }
+  .benefit { margin-top: 10px; padding-top: 8px; font-size: 0.84rem; }
+  .note { font-size: 0.66rem; margin-top: 6px; }
+  .count b { font-size: 1.6rem; }
+}
+@media (max-height: 700px) and (max-width: 899px) { .benefit { display: none; } }
+
+/* Movimiento reducido: los cuatro servicios se leen uno tras otro y el diagrama queda en su estado final. */
+@media (prefers-reduced-motion: reduce) {
+  .frame { height: auto; display: block; padding-top: 40px; }
+  .diagram { height: min(80vw, 640px); margin-bottom: 40px; }
+  .panels { min-height: 0; }
+  .panel { position: static; opacity: 1 !important; transform: none !important; margin-bottom: 56px; padding-bottom: 40px; border-bottom: 1px solid var(--rz-line-2); }
+  .tabs, .count, .caps, .diagramTop { display: none; }
+}

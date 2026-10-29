@@ -1,0 +1,7 @@
+.form { grid-column: 7 / -1; border: 1px solid var(--rz-line); padding: clamp(22px, 3vw, 44px); background: rgba(255, 255, 255, 0.015); position: relative; }
+.form::before { content: ""; position: absolute; left: -1px; top: -1px; width: 14px; height: 14px; border-top: 1px solid #fff; border-left: 1px solid #fff; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+.foot { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between; }
+.status { min-height: 1.5em; font-size: 0.9rem; color: var(--rz-fg-soft); margin: 18px 0 0; }
+@media (max-width: 1000px) { .form { grid-column: 1 / -1; } }
+@media (max-width: 899px) { .row { grid-template-columns: 1fr; } }
