@@ -5,15 +5,13 @@ import { principles } from "@/data/approach";
 import { approachIntro } from "@/data/site";
 import type { FigureId } from "@/data/types";
 import { useApproachFigures } from "@/logic/hooks/useApproachFigures";
-import { FitFigure } from "./figures/FitFigure";
-import { GrowthFigure } from "./figures/GrowthFigure";
-import { PrecisionFigure } from "./figures/PrecisionFigure";
+import { FitScene3D, GrowthScene3D, PrecisionScene3D } from "../../scenes/lazy";
 import s from "./ApproachSection.module.css";
 
 const figures: Record<FigureId, ReactNode> = {
-  fit: <FitFigure />,
-  precision: <PrecisionFigure />,
-  growth: <GrowthFigure />,
+  fit: <FitScene3D />,
+  precision: <PrecisionScene3D />,
+  growth: <GrowthScene3D />,
 };
 
 export function ApproachSection() {

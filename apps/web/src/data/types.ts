@@ -12,6 +12,8 @@ export type Service = {
   description: string;
   benefit: string;
   note?: string;
+  /** Temas que la gente busca y que este servicio cubre; se muestran como etiquetas legibles. */
+  topics: string[];
   /** Leyenda que acompaña a la escena del diagrama. */
   scene: { caption: string; tone: SceneTone };
 };
@@ -27,3 +29,5 @@ export type Principle = {
   figureCaption: [string, string];
   reversed?: boolean;
 };
+
+export type Faq = { q: string; a: string };

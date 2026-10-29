@@ -6,7 +6,7 @@ import { useContactForm } from "@/logic/hooks/useContactForm";
 import s from "./ContactForm.module.css";
 
 export function ContactForm() {
-  const { values, errors, status, onChange, onBlur, onSubmit } = useContactForm();
+  const { values, errors, status, waUrl, onChange, onBlur, onSubmit } = useContactForm();
   const f = copy.fields;
   return (
     <form className={s.form} onSubmit={onSubmit} noValidate>
@@ -20,11 +20,11 @@ export function ContactForm() {
       </div>
       <div className={s.row}>
         <Field id="f-company" label={f.company}>
-          {({ invalid: _i, ...c }) => <Input {...c} name="company" type="text" autoComplete="organization" value={values.company} onChange={onChange} />}
+          {({ id, "aria-describedby": d }) => <Input id={id} aria-describedby={d} name="company" type="text" autoComplete="organization" value={values.company} onChange={onChange} />}
         </Field>
         <Field id="f-area" label={f.area}>
-          {({ invalid: _i, ...c }) => (
-            <Select {...c} name="area" value={values.area} onChange={onChange}>
+          {({ id, "aria-describedby": d }) => (
+            <Select id={id} aria-describedby={d} name="area" value={values.area} onChange={onChange}>
               <option value="">{copy.undecided}</option>
               {services.map((sv) => <option key={sv.id}>{sv.label}</option>)}
             </Select>
@@ -38,7 +38,10 @@ export function ContactForm() {
         <Button variant="solid" type="submit" magnetic>{copy.submit}</Button>
         <Mono>{copy.note}</Mono>
       </div>
-      <p className={s.status} role="status" aria-live="polite">{status}</p>
+      <p className={s.status} role="status" aria-live="polite">
+        {status}
+        {waUrl && <> <a href={waUrl} target="_blank" rel="noopener noreferrer">{copy.openLink}</a>.</>}
+      </p>
     </form>
   );
 }

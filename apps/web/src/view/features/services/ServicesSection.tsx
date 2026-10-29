@@ -6,7 +6,8 @@ import { servicesIntro } from "@/data/site";
 import { useReducedMotion } from "@/logic/hooks/useMediaQuery";
 import { useServicesScene } from "@/logic/hooks/useServicesScene";
 import { scrollToService } from "@/logic/services/servicesScroller";
-import { ServiceDiagram } from "./ServiceDiagram";
+import { ModelCredit } from "../../layout/ModelCredit";
+import { ServicesScene3D } from "../../scenes/lazy";
 import s from "./ServicesSection.module.css";
 
 export function ServicesSection() {
@@ -33,6 +34,9 @@ export function ServicesSection() {
                   <h3 className={s.panelTitle}>{sv.title}</h3>
                   <Text>{sv.description}</Text>
                   <p className={s.benefit}><Mono as="span" className={s.benefitLabel}>{servicesIntro.benefitLabel}</Mono>{sv.benefit}</p>
+                  <ul className={s.topics} aria-label="Temas que cubre">
+                    {sv.topics.map((t) => <li key={t}>{t}</li>)}
+                  </ul>
                   {sv.note && <Mono className={s.note}>{sv.note}</Mono>}
                 </article>
               ))}
@@ -46,7 +50,8 @@ export function ServicesSection() {
 
           <div className={s.diagram}>
             <div className={s.diagramTop} aria-hidden="true"><Mono>Diagrama de sistema</Mono><Mono>Escena 0{scene + 1} / 04</Mono></div>
-            <ServiceDiagram />
+            <ServicesScene3D />
+            <ModelCredit className={s.credit} />
             <div className={s.caps} aria-hidden="true">
               {services.map((sv) => (
                 <span key={sv.id} className={`${s.cap} ${sv.scene.tone === "alert" ? s.alert : sv.scene.tone === "ok" ? s.ok : ""}`} data-cap>
