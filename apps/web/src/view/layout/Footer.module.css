@@ -4,6 +4,6 @@
 .links { display: flex; gap: 26px; flex-wrap: wrap; font-family: var(--rz-font-mono); font-size: 0.74rem; color: var(--rz-mut); }
 .links a:hover { color: #fff; }
 .big { font-family: var(--rz-font-display); font-weight: 900; font-stretch: 125%; letter-spacing: -0.05em; line-height: 0.8; font-size: 20cqw; white-space: nowrap; color: rgba(255, 255, 255, 0.03); -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.5); user-select: none; margin: 30px 0 28px; }
-.credit { margin-top: 18px; max-width: 60em; }
+.credit { margin: 18px 0 0; max-width: 60em; font-family: var(--rz-font-mono); font-size: 0.74rem; color: var(--rz-mut); }
 .credit a { text-decoration: underline; text-underline-offset: 3px; }
 .credit a:hover { color: #fff; }

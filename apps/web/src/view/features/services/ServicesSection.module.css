@@ -20,6 +20,9 @@
 .diagram::after { right: -1px; bottom: -1px; border-left: 0; border-top: 0; }
 .diagramTop { position: absolute; left: 16px; right: 16px; top: 12px; display: flex; justify-content: space-between; z-index: 2; }
 .caps { position: absolute; left: 16px; right: 16px; bottom: 12px; height: 1.4em; z-index: 2; font-family: var(--rz-font-mono); font-size: 0.74rem; color: var(--rz-mut); }
+.credit { position: absolute; right: 12px; bottom: 8px; z-index: 3; margin: 0; padding: 4px 6px; background: rgba(5, 5, 5, 0.82); max-width: 42%; text-align: right; font-family: var(--rz-font-mono); font-size: 0.62rem; line-height: 1.45; color: var(--rz-mut); }
+.credit a { text-decoration: underline; text-underline-offset: 2px; }
+.credit a:hover { color: #fff; }
 .cap { position: absolute; left: 0; bottom: 0; display: flex; align-items: center; gap: 0.7em; }
 .cap i { width: 7px; height: 7px; background: var(--rz-dim); }
 .alert i { background: var(--rz-red); }
@@ -27,6 +30,7 @@
 
 @media (max-width: 1000px) { .introTitle, .introText { grid-column: 1 / -1; } }
 @media (max-width: 899px) {
+  .credit { left: 12px; right: 12px; bottom: 32px; max-width: none; text-align: left; font-size: 0.58rem; }
   .frame { grid-template-columns: 1fr; grid-template-rows: minmax(0, 38svh) minmax(0, 1fr); gap: 12px; padding-top: calc(var(--rz-nav-h) + 8px); padding-bottom: 14px; }
   .diagram { order: -1; }
   .panels { min-height: 0; margin-block: 8px; }
@@ -44,4 +48,5 @@
   .panels { min-height: 0; }
   .panel { position: static; opacity: 1 !important; transform: none !important; margin-bottom: 56px; padding-bottom: 40px; border-bottom: 1px solid var(--rz-line-2); }
   .tabs, .count, .caps, .diagramTop { display: none; }
+  .credit { position: static; max-width: none; padding: 8px 16px; text-align: left; }
 }

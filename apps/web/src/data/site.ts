@@ -83,15 +83,18 @@ export const form = {
 export const footer = {
   legal: "© 2026 Ryzon. [razón social]",
   tagline: "Arquitectura de redes, monitoreo, software y soporte.",
-  /** Crédito exigido por la licencia CC BY 4.0 del modelo 3D (adaptado: sin la marca original del gabinete). */
-  credit: {
-    before: "Modelo 3D «",
-    title: "Server V2 +console",
-    url: "https://sketchfab.com/3d-models/server-v2-console-f24594ece9634cec9c1210c041838371",
-    after: "» de FlevasGR, adaptado. Licencia ",
-    license: "CC BY 4.0",
-    licenseUrl: "https://creativecommons.org/licenses/by/4.0/",
-  },
+};
+
+/** Atribución exigida por la licencia CC BY 4.0 del modelo 3D (texto sugerido por Sketchfab, sin traducir). */
+export const modelCredit = {
+  title: "Server V2 +console",
+  url: "https://skfb.ly/ADNW",
+  author: "FlevasGR",
+  authorUrl: "https://sketchfab.com/FlevasGR",
+  license: "Creative Commons Attribution",
+  licenseUrl: "http://creativecommons.org/licenses/by/4.0/",
+  /** La licencia pide indicar los cambios: se quitó la marca de la textura del gabinete. */
+  changes: "Adaptado.",
 };
 
 export const meta = {
