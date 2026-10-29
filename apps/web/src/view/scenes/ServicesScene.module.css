@@ -1,0 +1,1 @@
+.label { position: absolute; left: 0; top: 0; font-family: var(--rz-font-mono); font-size: 11px; letter-spacing: 0.04em; color: #d0d0d0; white-space: nowrap; padding-left: 14px; border-left: 1px solid rgba(255, 255, 255, 0.35); opacity: 0; pointer-events: none; will-change: transform; }

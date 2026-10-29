@@ -14,7 +14,7 @@
 .benefitLabel { display: block; margin-bottom: 4px; }
 .note { margin-top: 12px; max-width: 32em; }
 .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.diagram { position: relative; border: 1px solid var(--rz-line); background: rgba(255, 255, 255, 0.012); min-height: 0; display: flex; }
+.diagram { position: relative; overflow: hidden; border: 1px solid var(--rz-line); background: rgba(255, 255, 255, 0.012); min-height: 0; display: flex; }
 .diagram::before, .diagram::after { content: ""; position: absolute; width: 14px; height: 14px; border: 1px solid #fff; }
 .diagram::before { left: -1px; top: -1px; border-right: 0; border-bottom: 0; }
 .diagram::after { right: -1px; bottom: -1px; border-left: 0; border-top: 0; }
