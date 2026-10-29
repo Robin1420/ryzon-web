@@ -2,7 +2,7 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { useMemo, useRef, type RefObject } from "react";
 import * as THREE from "three";
-import { BUS_Y, CAMERA_KEYS, FAULT_UNIT, HUB, LABELS, LAPTOP, RACK, RACK_TOP_Y, SCAN, UI_CENTER_X, UI_LAYERS, UI_SIZE, rackZ, type V3 } from "@/data/datacenter";
+import { BUS_Y, CAMERA_KEYS, FAULT_UNIT, GHOST, HUB, LABELS, LAPTOP, RACK, RACK_TOP_Y, SCAN, UI_CENTER_X, UI_LAYERS, UI_SIZE, rackZ, type V3 } from "@/data/datacenter";
 import { cloneRack } from "@/logic/engines/rackModel";
 import { easeOut, seg, servicesScene, smooth } from "@/logic/engines/sceneState";
 import { useRackModel } from "@/logic/hooks/useRackModel";
@@ -16,12 +16,15 @@ const appear = (a: number, b: number) => () => smooth(seg(servicesScene.t, a, b)
 /** Rack del modelo 3D: se "instala" subiendo desde el piso al inicio de la escena 1. */
 function Rack({ index, source }: { index: number; source: THREE.Object3D }) {
   const g = useRef<THREE.Group>(null);
-  const rack = useMemo(() => cloneRack(source, index === RACK.main), [source, index]);
+  const { rack, ghost } = useMemo(() => cloneRack(source, index === RACK.main), [source, index]);
   useFrame(() => {
     if (!g.current) return;
-    const k = easeOut(seg(servicesScene.t, 0.05 + index * 0.07, 0.55 + index * 0.07));
+    const t = servicesScene.t;
+    const k = easeOut(seg(t, 0.05 + index * 0.07, 0.55 + index * 0.07));
     g.current.position.y = -8 * (1 - k);
     g.current.visible = k > 0.003;
+    const opacity = lerp(GHOST.opacity, 1, smooth(seg(t, GHOST.solidFrom, GHOST.solidTo)));
+    ghost.forEach((m) => { m.opacity = opacity; m.depthWrite = opacity > 0.98; });
   });
   return <group ref={g} position={[0, 0, rackZ(index)]}><primitive object={rack} /></group>;
 }

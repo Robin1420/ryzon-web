@@ -1,7 +1,10 @@
 /** Escena del data center: hilera de racks (el modelo se repite) con el frente hacia +x. Unidades del modelo. */
 export type V3 = [number, number, number];
 
-export const RACK = { count: 5, pitch: 2.2, height: 5.15, front: 0.97, main: 2 } as const;
+export const RACK = { count: 3, pitch: 2.2, height: 5.15, front: 0.97, main: 1 } as const;
+
+/** Los racks laterales se ven transparentes hasta el cierre, para que se entienda que el del medio es el central. */
+export const GHOST = { opacity: 0.18, solidFrom: 3.5, solidTo: 3.95 } as const;
 export const rackZ = (i: number) => (i - (RACK.count - 1) / 2) * RACK.pitch;
 
 /** Equipo central de red sobre la hilera y troncal que baja a cada rack. */
@@ -25,7 +28,7 @@ export const UI_CENTER_X = 2.3;
 export const SCAN = { x: 0.3, w: 3.4, d: 2.0 } as const;
 
 type Key = { t: number; pos: V3; look: V3 };
-const WIDE: Pick<Key, "pos" | "look"> = { pos: [15.5, 6.8, 7.6], look: [0, 3.2, 0] };
+const WIDE: Pick<Key, "pos" | "look"> = { pos: [12.5, 6, 6.4], look: [0, 3.2, 0] };
 /** Recorrido de la cámara: pasa por cada zona del modelo según avanza el scroll (t de 0 a 4). */
 export const CAMERA_KEYS: Key[] = [
   { t: 0, ...WIDE },

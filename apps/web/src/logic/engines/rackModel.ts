@@ -46,9 +46,20 @@ export async function loadRack(): Promise<THREE.Object3D> {
   return style(gltf.scene);
 }
 
-/** Copia de un rack; solo el principal conserva la laptop extraíble. */
-export function cloneRack(source: THREE.Object3D, withConsole: boolean) {
+/**
+ * Copia de un rack. Solo el principal conserva la laptop extraíble; los demás reciben materiales
+ * propios (devueltos en `ghost`) para poder volverlos transparentes sin afectar al principal.
+ */
+export function cloneRack(source: THREE.Object3D, isMain: boolean) {
   const rack = source.clone(true);
-  rack.traverse((o) => { if (o.userData.part === "console") o.visible = withConsole; });
-  return rack;
+  const ghost: THREE.Material[] = [];
+  rack.traverse((o) => {
+    const mesh = o as THREE.Mesh;
+    if (o.userData.part === "console") o.visible = isMain;
+    if (isMain || !mesh.isMesh) return;
+    mesh.material = (mesh.material as THREE.Material).clone();
+    (mesh.material as THREE.Material).transparent = true;
+    ghost.push(mesh.material as THREE.Material);
+  });
+  return { rack, ghost };
 }
