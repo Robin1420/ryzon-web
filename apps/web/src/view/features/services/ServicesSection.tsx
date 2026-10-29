@@ -34,6 +34,9 @@ export function ServicesSection() {
                   <h3 className={s.panelTitle}>{sv.title}</h3>
                   <Text>{sv.description}</Text>
                   <p className={s.benefit}><Mono as="span" className={s.benefitLabel}>{servicesIntro.benefitLabel}</Mono>{sv.benefit}</p>
+                  <ul className={s.topics} aria-label="Temas que cubre">
+                    {sv.topics.map((t) => <li key={t}>{t}</li>)}
+                  </ul>
                   {sv.note && <Mono className={s.note}>{sv.note}</Mono>}
                 </article>
               ))}

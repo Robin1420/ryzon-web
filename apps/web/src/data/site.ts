@@ -4,6 +4,7 @@ export const nav: NavItem[] = [
   { id: "inicio", label: "Inicio", href: "#inicio" },
   { id: "servicios", label: "Servicios", href: "#servicios" },
   { id: "enfoque", label: "Nuestro enfoque", href: "#enfoque" },
+  { id: "preguntas", label: "Preguntas", href: "#preguntas" },
   { id: "contacto", label: "Contacto", href: "#contacto" },
 ];
 
@@ -12,6 +13,7 @@ export const sectionToNav: Record<string, string> = {
   inicio: "inicio",
   servicios: "servicios",
   enfoque: "enfoque",
+  preguntas: "preguntas",
   contacto: "contacto",
   formulario: "contacto",
 };
@@ -109,7 +111,20 @@ export const modelCredit = {
 };
 
 export const meta = {
-  title: "Ryzon — Arquitectura de redes, monitoreo, software a medida y soporte",
+  title: "Servicios de TI en Perú: redes, software y soporte | Ryzon",
   description:
-    "Ryzon diseña soluciones tecnológicas adaptadas a cada negocio: arquitectura de redes, monitoreo, software a medida y soporte tecnológico.",
+    "Ryzon diseña redes, monitoreo, software a medida, automatización y soporte técnico para empresas en Perú. Cuéntanos tu proyecto y te asesoramos.",
+  keywords: [
+    "servicios de TI en Perú",
+    "empresa de tecnología Perú",
+    "diseño de redes empresariales",
+    "monitoreo de redes",
+    "software a medida Perú",
+    "automatización de procesos",
+    "soporte técnico para empresas",
+    "asesoría tecnológica",
+    "integración de sistemas",
+  ],
+  locale: "es_PE",
+  brand: "Ryzon",
 };

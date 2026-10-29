@@ -12,6 +12,8 @@
 .panelTitle { font-family: var(--rz-font-display); font-weight: 800; font-stretch: 112%; letter-spacing: -0.03em; line-height: 1; font-size: clamp(1.7rem, 3.1vw, 3.2rem); margin: 14px 0 18px; }
 .benefit { margin: 18px 0 0; padding-top: 14px; border-top: 1px solid var(--rz-line); font-size: 0.95rem; max-width: 30em; }
 .benefitLabel { display: block; margin-bottom: 4px; }
+.topics { display: flex; flex-wrap: wrap; gap: 6px 8px; margin: 14px 0 0; padding: 0; list-style: none; max-width: 34em; }
+.topics li { font-family: var(--rz-font-mono); font-size: 0.68rem; color: var(--rz-mut); border: 1px solid var(--rz-line); padding: 4px 8px; }
 .note { margin-top: 12px; max-width: 32em; }
 .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .diagram { position: relative; overflow: hidden; border: 1px solid var(--rz-line); background: rgba(255, 255, 255, 0.012); min-height: 0; display: flex; }
@@ -39,6 +41,7 @@
   .note { font-size: 0.66rem; margin-top: 6px; }
   .count b { font-size: 1.6rem; }
 }
+@media (max-width: 899px) { .topics { display: none; } }
 @media (max-height: 700px) and (max-width: 899px) { .benefit { display: none; } }
 
 /* Movimiento reducido: los cuatro servicios se leen uno tras otro y el diagrama queda en su estado final. */
