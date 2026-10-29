@@ -23,4 +23,4 @@ export const motion = {
   finePointerQuery: "(hover: hover) and (pointer: fine)",
 } as const;
 
-export type Colors = typeof colors;
+

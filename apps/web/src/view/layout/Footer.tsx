@@ -12,7 +12,7 @@ export function Footer() {
             {nav.map((n) => <a key={n.id} href={n.href}>{n.label}</a>)}
           </nav>
         </div>
-        <div className={s.big} aria-hidden="true">RYZON</div>
+        <div className={s.big} aria-hidden="true" />
         <div className={s.row}><Mono>{footer.legal}</Mono><Mono>{footer.tagline}</Mono></div>
       </div>
     </footer>

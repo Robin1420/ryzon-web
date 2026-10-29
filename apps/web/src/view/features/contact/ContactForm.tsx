@@ -20,11 +20,11 @@ export function ContactForm() {
       </div>
       <div className={s.row}>
         <Field id="f-company" label={f.company}>
-          {({ invalid: _i, ...c }) => <Input {...c} name="company" type="text" autoComplete="organization" value={values.company} onChange={onChange} />}
+          {({ id, "aria-describedby": d }) => <Input id={id} aria-describedby={d} name="company" type="text" autoComplete="organization" value={values.company} onChange={onChange} />}
         </Field>
         <Field id="f-area" label={f.area}>
-          {({ invalid: _i, ...c }) => (
-            <Select {...c} name="area" value={values.area} onChange={onChange}>
+          {({ id, "aria-describedby": d }) => (
+            <Select id={id} aria-describedby={d} name="area" value={values.area} onChange={onChange}>
               <option value="">{copy.undecided}</option>
               {services.map((sv) => <option key={sv.id}>{sv.label}</option>)}
             </Select>

@@ -1,15 +1,15 @@
 "use client";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useMemo, useRef, type RefObject } from "react";
+import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { BUS_Y, CAMERA_KEYS, FAULT_UNIT, GHOST, HUB, LABELS, LAPTOP, RACK, RACK_TOP_Y, SCAN, UI_CENTER_X, UI_LAYERS, UI_SIZE, rackZ, type V3 } from "@/data/datacenter";
 import { cloneRack } from "@/logic/engines/rackModel";
 import { easeOut, seg, servicesScene, smooth } from "@/logic/engines/sceneState";
 import { useRackModel } from "@/logic/hooks/useRackModel";
-import { clamp, lerp } from "@/logic/utils/math";
+import { lerp } from "@/logic/utils/math";
+import { AnchorSync, anchorLabels } from "./AnchorSync";
 import { Lights, Part, RED, WHITE } from "./parts";
 import { SceneCanvas } from "./SceneCanvas";
-import s from "./ServicesScene.module.css";
 
 const appear = (a: number, b: number) => () => smooth(seg(servicesScene.t, a, b));
 
@@ -191,24 +191,6 @@ function Rig() {
   return null;
 }
 
-/** Proyecta cada ancla 3D a pantalla y mueve las etiquetas DOM, que viven fuera del lienzo. */
-function LabelSync({ labels }: { labels: RefObject<Array<HTMLDivElement | null>> }) {
-  const { camera, size } = useThree();
-  const v = useMemo(() => new THREE.Vector3(), []);
-  useFrame(() => {
-    const t = servicesScene.t;
-    LABELS.forEach((l, i) => {
-      const el = labels.current?.[i];
-      if (!el) return;
-      v.set(...l.at).project(camera);
-      const x = clamp((v.x * 0.5 + 0.5) * size.width, 10, size.width - 150), y = clamp((-v.y * 0.5 + 0.5) * size.height, 30, size.height - 50);
-      el.style.transform = `translate(${x}px, ${y}px) translateY(-50%)`;
-      el.style.opacity = String(smooth(seg(t, l.from, l.from + 0.15)) * (1 - smooth(seg(t, l.to - 0.15, l.to))));
-    });
-  });
-  return null;
-}
-
 function DataCenter() {
   const source = useRackModel();
   return (
@@ -225,18 +207,13 @@ function DataCenter() {
 
 export function ServicesScene() {
   const labels = useRef<Array<HTMLDivElement | null>>([]);
-  const overlay = LABELS.map((l, i) => (
-    <div key={l.name} ref={(el) => { labels.current[i] = el; }} className={s.label} aria-hidden="true">
-      <b>{l.name}</b>
-      <span>{l.note}</span>
-    </div>
-  ));
+  const overlay = anchorLabels(LABELS, labels);
   return (
     <SceneCanvas overlay={overlay} label="Data center en 3D: una hilera de racks se conecta, se detecta una falla en un equipo, aparecen capas de software desde la consola y la unidad con falla se repara." camera={{ position: [17, 7, 8], fov: 30 }}>
       <fog attach="fog" args={["#050505", 26, 52]} />
       <Lights />
       <Rig />
-      <LabelSync labels={labels} />
+      <AnchorSync anchors={LABELS} labels={labels} progress={() => servicesScene.t} />
       <DataCenter />
     </SceneCanvas>
   );

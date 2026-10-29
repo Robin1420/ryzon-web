@@ -2,11 +2,10 @@
 import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef, type ReactNode } from "react";
 import * as THREE from "three";
-import type { V3 } from "@/data/scene3d";
+import type { V3 } from "@/data/datacenter";
 
 export const RED = new THREE.Color("#F40612");
 export const WHITE = new THREE.Color("#ffffff");
-export const INK = new THREE.Color("#050505");
 
 type Api = { group: THREE.Group; fill: THREE.MeshStandardMaterial; edge: THREE.LineBasicMaterial };
 type PartProps = {

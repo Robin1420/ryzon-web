@@ -7,7 +7,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "typecheck": "tsc -p tsconfig.json",
-    "lint": "tsc -p tsconfig.json"
+    "lint": "eslint src"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -18,13 +18,16 @@
     "next": "^15.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "three": "^0.186.1"
+    "three": "^0.180.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.7",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "@types/three": "^0.186.0",
+    "@types/three": "^0.180.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^15.5.28",
     "typescript": "^5.7.0"
   }
 }

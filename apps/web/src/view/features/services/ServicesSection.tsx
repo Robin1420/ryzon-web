@@ -7,7 +7,7 @@ import { useReducedMotion } from "@/logic/hooks/useMediaQuery";
 import { useServicesScene } from "@/logic/hooks/useServicesScene";
 import { scrollToService } from "@/logic/services/servicesScroller";
 import { ModelCredit } from "../../layout/ModelCredit";
-import { ServicesScene } from "../../scenes/ServicesScene";
+import { ServicesScene3D } from "../../scenes/lazy";
 import s from "./ServicesSection.module.css";
 
 export function ServicesSection() {
@@ -47,7 +47,7 @@ export function ServicesSection() {
 
           <div className={s.diagram}>
             <div className={s.diagramTop} aria-hidden="true"><Mono>Diagrama de sistema</Mono><Mono>Escena 0{scene + 1} / 04</Mono></div>
-            <ServicesScene />
+            <ServicesScene3D />
             <ModelCredit className={s.credit} />
             <div className={s.caps} aria-hidden="true">
               {services.map((sv) => (

@@ -7,7 +7,11 @@ import { ProgressBar } from "@/view/layout/ProgressBar";
 import { SkipLink } from "@/view/layout/SkipLink";
 import "./globals.css";
 
-export const metadata: Metadata = { title: meta.title, description: meta.description };
+export const metadata: Metadata = {
+  title: meta.title,
+  description: meta.description,
+  openGraph: { title: meta.title, description: meta.description, type: "website", locale: "es_ES", siteName: "Ryzon" },
+};
 export const viewport: Viewport = { themeColor: "#050505", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

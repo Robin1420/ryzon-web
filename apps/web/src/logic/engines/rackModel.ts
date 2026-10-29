@@ -40,10 +40,15 @@ function style(root: THREE.Object3D) {
   return root;
 }
 
-export async function loadRack(): Promise<THREE.Object3D> {
-  const buffer = await loadBuffer();
-  const gltf = await new Promise<{ scene: THREE.Group }>((resolve, reject) => new GLTFLoader().parse(buffer, "", resolve, reject));
-  return style(gltf.scene);
+let cached: Promise<THREE.Object3D> | null = null;
+
+/** Carga y adapta el modelo una sola vez; las escenas piden copias con `cloneRack`. */
+export function loadRack(): Promise<THREE.Object3D> {
+  cached ??= loadBuffer()
+    .then((buffer) => new Promise<{ scene: THREE.Group }>((resolve, reject) => new GLTFLoader().parse(buffer, "", resolve, reject)))
+    .then((gltf) => style(gltf.scene))
+    .catch((e) => { cached = null; throw e; });
+  return cached;
 }
 
 /**

@@ -11,4 +11,3 @@ export const figureScene = { fit: { p: 0 }, precision: { p: 0 }, growth: { p: 0 
 export const seg = (v: number, a: number, b: number) => clamp((v - a) / (b - a), 0, 1);
 export const smooth = (x: number) => x * x * (3 - 2 * x);
 export const easeOut = (x: number) => 1 - Math.pow(1 - x, 3);
-export const easeIn = (x: number) => x * x * x;

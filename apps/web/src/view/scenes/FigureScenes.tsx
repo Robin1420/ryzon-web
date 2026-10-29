@@ -1,225 +1,179 @@
 "use client";
 import { useFrame } from "@react-three/fiber";
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import * as THREE from "three";
-import { DIAL, FIT_L, FIT_L_OUTLINE, FIT_TILES, GROWTH } from "@/data/scene3d";
+import { CABINET, FIT_SLABS, FIT_TAB, FRONT_X, GROWTH, GROWTH_OFFSET, PRECISION_OFFSET, SCALE, U, growthZ, type V3 } from "@/data/figures";
+import { cloneRack } from "@/logic/engines/rackModel";
 import { easeOut, figureScene, seg, smooth } from "@/logic/engines/sceneState";
-import { Lights, Part, RED, Sway } from "./parts";
+import { useRackModel } from "@/logic/hooks/useRackModel";
+import { AnchorSync, anchorLabels, type Anchor } from "./AnchorSync";
+import { Lights, Part, Sway } from "./parts";
 import { SceneCanvas } from "./SceneCanvas";
 
 const lerp3 = (a: readonly number[], b: readonly number[], k: number) => [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k] as const;
+const wire = (size: V3) => new THREE.EdgesGeometry(new THREE.BoxGeometry(...size));
+const RED_HEX = "#F40612";
 
-/* ---------- Fig. 1: piezas que encajan ---------- */
-function LTile() {
-  const g = useRef<THREE.Group>(null);
-  const geo = useMemo(() => {
-    const shape = new THREE.Shape(FIT_L_OUTLINE.map((p) => new THREE.Vector2(...FIT_L.toLocal(p))));
-    const e = new THREE.ExtrudeGeometry(shape, { depth: FIT_L.depth, bevelEnabled: false });
-    e.rotateX(-Math.PI / 2);
-    return e;
-  }, []);
-  const edges = useMemo(() => new THREE.EdgesGeometry(geo), [geo]);
-  const fill = useRef<THREE.MeshStandardMaterial>(null);
-  const line = useRef<THREE.LineBasicMaterial>(null);
-  useFrame(() => {
-    const k = easeOut(seg(figureScene.fit.p, 0.55, 1));
-    if (!g.current || !fill.current || !line.current) return;
-    const [x, y, z] = lerp3(FIT_L.from, [0, 0, 0], k);
-    g.current.position.set(x, y, z);
-    g.current.rotation.y = FIT_L.spin * (1 - k);
-    fill.current.opacity = 0.6 * Math.min(1, k * 3);
-    line.current.opacity = Math.min(1, k * 3);
-  });
+/** Contorno de un gabinete de rack (sin relleno). */
+function Cabinet({ z = 0, opacity = 0.35, update }: { z?: number; opacity?: number; update?: (m: THREE.LineBasicMaterial) => void }) {
+  const geo = useMemo(() => wire([CABINET.x, CABINET.y, CABINET.z]), []);
+  const mat = useRef<THREE.LineBasicMaterial>(null);
+  useFrame(() => { if (mat.current) update?.(mat.current); });
   return (
-    <group ref={g}>
-      <mesh geometry={geo}>
-        <meshStandardMaterial ref={fill} color="#4a0509" transparent roughness={0.5} />
-      </mesh>
-      <lineSegments geometry={edges}>
-        <lineBasicMaterial ref={line} color="#F40612" transparent />
-      </lineSegments>
-    </group>
+    <lineSegments geometry={geo} position={[0, CABINET.y / 2, z]}>
+      <lineBasicMaterial ref={mat} color="#ffffff" transparent opacity={opacity} />
+    </lineSegments>
+  );
+}
+
+/** Copia del rack del modelo; sube desde el piso entre `a` y `b` del avance. */
+function RackCopy({ z, a, b, progress }: { z: number; a: number; b: number; progress: () => number }) {
+  const source = useRackModel();
+  const g = useRef<THREE.Group>(null);
+  const rack = useMemo(() => (source ? cloneRack(source, false).rack : null), [source]);
+  useFrame(() => {
+    if (!g.current) return;
+    const k = easeOut(seg(progress(), a, b));
+    g.current.position.y = -7 * (1 - k);
+    g.current.visible = k > 0.003;
+  });
+  return rack ? <group ref={g} position={[0, 0, z]}><primitive object={rack} /></group> : null;
+}
+
+/* ---------- Fig. 1: módulos que se acomodan en un rack; el último se hace a la medida ---------- */
+const fitProgress = () => figureScene.fit.p;
+
+function Slab({ i }: { i: number }) {
+  const s = FIT_SLABS[i];
+  const custom = s.kind === "custom";
+  const place = (group: THREE.Group, offset: V3 = [0, 0, 0]) => {
+    const k = easeOut(seg(fitProgress(), 0.12 + i * 0.13, 0.6 + i * 0.13));
+    const [x, y, z] = lerp3(s.from, [0, 0, 0], k);
+    group.position.set(x + offset[0], s.y + y + offset[1], z + offset[2]);
+    group.rotation.y = s.spin * (1 - k);
+    return Math.min(1, k * 3);
+  };
+  const fill = s.kind === "light" ? "#f1f1f1" : s.kind === "dark" ? "#1c1c1c" : custom ? "#4a0509" : "#0a0a0a";
+  const edge = custom ? RED_HEX : "#ffffff";
+  return (
+    <>
+      <Part pos={[0, s.y, 0]} size={s.size} fill={fill} fillOpacity={s.kind === "line" ? 0.75 : 1} edge={edge} edgeOpacity={s.kind === "light" ? 0 : 0.85} update={({ group }) => place(group)} />
+      {custom && <Part pos={[0, s.y, 0]} size={FIT_TAB.size} fill="#4a0509" fillOpacity={0.9} edge={RED_HEX} edgeOpacity={1} update={({ group }) => place(group, FIT_TAB.offset)} />}
+    </>
   );
 }
 
 export function FitScene() {
   return (
-    <SceneCanvas label="Piezas de distinto tamaño que encajan en un marco; la última, en rojo, tiene una forma hecha a medida." camera={{ position: [8.6, 10.4, 12.6], fov: 30 }}>
+    <SceneCanvas label="Un rack al que se acomodan módulos de distintos tamaños; el último, en rojo, tiene una forma hecha a la medida." camera={{ position: [8, 4.4, 8.6], fov: 30 }}>
       <Lights />
-      <Sway amount={0.3}>
-        <group rotation-y={-0.25}>
-          {FIT_TILES.map((t, i) => (
-            <Part
-              key={i}
-              pos={t.pos}
-              size={t.size}
-              fill={t.kind === "light" ? "#f1f1f1" : t.kind === "dark" ? "#1c1c1c" : "#0a0a0a"}
-              fillOpacity={t.kind === "line" ? 0.7 : 1}
-              edgeOpacity={t.kind === "light" ? 0 : 0.7}
-              update={({ group }) => {
-                const k = easeOut(seg(figureScene.fit.p, i * 0.12, i * 0.12 + 0.5));
-                const [x, y, z] = lerp3(t.from, [0, 0, 0], k);
-                group.position.set(t.pos[0] + x, t.pos[1] + y, t.pos[2] + z);
-                group.rotation.y = t.spin * (1 - k);
-                return Math.min(1, k * 3);
-              }}
-            />
-          ))}
-          <LTile />
+      <Sway amount={0.25}>
+        <group position-y={-CABINET.y / 2}>
+          <Cabinet update={(m) => { m.opacity = 0.4 * smooth(seg(fitProgress(), 0, 0.15)); }} />
+          {FIT_SLABS.map((_, i) => <Slab key={i} i={i} />)}
         </group>
       </Sway>
     </SceneCanvas>
   );
 }
 
-/* ---------- Fig. 2: medida exacta ---------- */
-function Dial() {
-  const ticks = useRef<THREE.InstancedMesh>(null);
-  const ringA = useRef<THREE.Mesh>(null);
-  const ringB = useRef<THREE.Mesh>(null);
-  const core = useRef<THREE.Mesh>(null);
-  const mark = useRef<THREE.Mesh>(null);
-  const radius = useRef<THREE.Mesh>(null);
-  const spin = useRef<THREE.Group>(null);
-  const axes = useRef<THREE.Group>(null);
-  const dummy = useMemo(() => new THREE.Object3D(), []);
-  const markPos = useMemo(() => new THREE.Vector3(Math.cos(DIAL.markAngle) * DIAL.ringB, 0.1, Math.sin(DIAL.markAngle) * DIAL.ringB), []);
+/* ---------- Fig. 2: cada unidad se mide; una queda marcada en rojo ---------- */
+const precisionProgress = () => figureScene.precision.p;
+const PRECISION_ANCHORS: readonly Anchor[] = [
+  { name: "DETALLE", note: "Cada unidad, medida", at: [SCALE.x + PRECISION_OFFSET[0], U * (SCALE.marked + 0.5) + PRECISION_OFFSET[1], SCALE.z - 0.2 + PRECISION_OFFSET[2]], from: 0.65, to: 1.01 },
+];
 
-  useEffect(() => {
-    if (ticks.current) ticks.current.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-  }, []);
-
-  useFrame(({ clock }) => {
-    const p = figureScene.precision.p;
-    if (spin.current) spin.current.rotation.y = p * 0.5 + clock.elapsedTime * 0.05;
-    if (axes.current) axes.current.scale.setScalar(Math.max(0.001, smooth(seg(p, 0, 0.45))));
-    if (ticks.current) {
-      for (let i = 0; i < DIAL.ticks; i++) {
-        const a = (i / DIAL.ticks) * Math.PI * 2, long = i % 6 === 0;
-        const r1 = DIAL.rInner, r2 = long ? DIAL.rLong : DIAL.rShort, len = r2 - r1;
-        const k = smooth(seg(p, 0.15 + (i / DIAL.ticks) * 0.35, 0.3 + (i / DIAL.ticks) * 0.35));
-        dummy.position.set(Math.cos(a) * (r1 + len / 2), 0, Math.sin(a) * (r1 + len / 2));
-        dummy.rotation.set(0, -a, 0);
-        dummy.scale.set(Math.max(len * k, 0.0001), k, k);
-        dummy.updateMatrix();
-        ticks.current.setMatrixAt(i, dummy.matrix);
-      }
-      ticks.current.instanceMatrix.needsUpdate = true;
-    }
-    ringB.current?.scale.setScalar(Math.max(0.001, easeOut(seg(p, 0.45, 0.75))));
-    ringA.current?.scale.setScalar(Math.max(0.001, easeOut(seg(p, 0.55, 0.85))));
-    core.current?.scale.setScalar(Math.max(0.001, smooth(seg(p, 0.7, 0.85))));
-    if (radius.current) radius.current.scale.x = Math.max(0.001, smooth(seg(p, 0.8, 0.92)));
-    if (mark.current) {
-      const k = seg(p, 0.88, 1), drop = (1 - easeOut(k)) * 3;
-      mark.current.visible = k > 0;
-      mark.current.position.set(markPos.x, markPos.y + drop, markPos.z);
-    }
+function Ruler() {
+  const spine = useRef<THREE.Mesh>(null);
+  const ticks = useRef<Array<THREE.Mesh | null>>([]);
+  const leader = useRef<THREE.Mesh>(null);
+  const led = useRef<THREE.Mesh>(null);
+  const markY = U * (SCALE.marked + 0.5);
+  const leaderLen = Math.abs(SCALE.z) - 0.75;
+  useFrame(() => {
+    const p = precisionProgress();
+    const k = easeOut(seg(p, 0, 0.3));
+    if (spine.current) { spine.current.scale.y = Math.max(k, 0.001); spine.current.position.y = (CABINET.y * k) / 2; }
+    ticks.current.forEach((t, i) => { if (t) { const a = smooth(seg(p, 0.2 + i * 0.03, 0.32 + i * 0.03)); t.scale.set(Math.max(a, 0.001), 1, 1); } });
+    const l = smooth(seg(p, 0.62, 0.8));
+    if (leader.current) { leader.current.visible = l > 0.002; leader.current.scale.z = Math.max(l, 0.001); leader.current.position.z = SCALE.z + (leaderLen * l) / 2; }
+    const on = smooth(seg(p, 0.78, 0.92));
+    if (led.current) { led.current.visible = on > 0.002; (led.current.material as THREE.MeshBasicMaterial).opacity = on * 0.85; }
   });
-
-  const R = DIAL.ringB;
   return (
-    <group ref={spin}>
-      <group ref={axes}>
-        <mesh><boxGeometry args={[9, 0.01, 0.01]} /><meshBasicMaterial color="#ffffff" transparent opacity={0.25} /></mesh>
-        <mesh><boxGeometry args={[0.01, 0.01, 7.4]} /><meshBasicMaterial color="#ffffff" transparent opacity={0.25} /></mesh>
-      </group>
-      <instancedMesh ref={ticks} args={[undefined, undefined, DIAL.ticks]}>
-        <boxGeometry args={[1, 0.02, 0.025]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.75} />
-      </instancedMesh>
-      <mesh ref={ringB} rotation-x={Math.PI / 2}>
-        <torusGeometry args={[R, 0.012, 8, 128]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.6} />
-      </mesh>
-      <mesh ref={ringA} rotation-x={Math.PI / 2}>
-        <torusGeometry args={[DIAL.ringA, 0.016, 8, 128]} />
-        <meshBasicMaterial color="#ffffff" />
-      </mesh>
-      <mesh ref={core}>
-        <boxGeometry args={[0.5, 0.5, 0.5]} />
-        <meshStandardMaterial color="#f1f1f1" roughness={0.4} />
-      </mesh>
-      <mesh ref={radius} position={[Math.cos(DIAL.markAngle) * R / 2, 0.05, Math.sin(DIAL.markAngle) * R / 2]} rotation-y={-DIAL.markAngle}>
-        <boxGeometry args={[R, 0.012, 0.012]} />
+    <>
+      <mesh ref={spine} position={[SCALE.x, 0, SCALE.z]}>
+        <boxGeometry args={[0.025, CABINET.y, 0.025]} />
         <meshBasicMaterial color="#ffffff" transparent opacity={0.7} />
       </mesh>
-      <mesh ref={mark} visible={false}>
-        <sphereGeometry args={[0.16, 24, 16]} />
-        <meshStandardMaterial color={RED} emissive={RED} emissiveIntensity={0.8} />
+      {Array.from({ length: SCALE.ticks + 1 }, (_, i) => (
+        <mesh key={i} ref={(m) => { ticks.current[i] = m; }} position={[SCALE.x, i * U, SCALE.z + 0.14]}>
+          <boxGeometry args={[0.02, 0.02, i % 6 === 0 ? 0.42 : 0.26]} />
+          <meshBasicMaterial color="#ffffff" transparent opacity={0.8} />
+        </mesh>
+      ))}
+      <mesh ref={leader} position={[SCALE.x, markY, SCALE.z]}>
+        <boxGeometry args={[0.02, 0.02, leaderLen]} />
+        <meshBasicMaterial color={RED_HEX} />
       </mesh>
-    </group>
+      <mesh ref={led} position={[FRONT_X + 0.02, markY, 0]}>
+        <boxGeometry args={[0.02, U * 0.8, 1.44]} />
+        <meshBasicMaterial color={RED_HEX} transparent />
+      </mesh>
+    </>
   );
 }
 
 export function PrecisionScene() {
+  const labels = useRef<Array<HTMLDivElement | null>>([]);
   return (
-    <SceneCanvas label="Círculos concéntricos con una escala graduada y un punto rojo marcando una posición exacta." camera={{ position: [0, 8.6, 8.8], fov: 32 }}>
+    <SceneCanvas overlay={anchorLabels(PRECISION_ANCHORS, labels)} label="Primer plano de un rack con una escala de unidades al costado y una unidad marcada en rojo." camera={{ position: [7.4, 4.2, 7.2], fov: 32 }}>
       <Lights />
-      <Sway amount={0.25}>
-        <Dial />
+      <AnchorSync anchors={PRECISION_ANCHORS} labels={labels} progress={precisionProgress} />
+      <Sway amount={0.18}>
+        <group position={PRECISION_OFFSET}>
+          <RackCopy z={0} a={0} b={0.3} progress={precisionProgress} />
+          <Ruler />
+        </group>
       </Sway>
     </SceneCanvas>
   );
 }
 
-/* ---------- Fig. 3: espacio para crecer ---------- */
-const growthLayout = (() => {
-  const { sizes, slot, gap } = GROWTH;
-  const total = sizes.reduce((a, b) => a + b, 0) + slot + gap * sizes.length;
-  let x = -total / 2;
-  const cubes = sizes.map((size) => { const c = { size, x: x + size / 2 }; x += size + gap; return c; });
-  return { cubes, slotX: x + slot / 2, left: -total / 2, total };
-})();
+/* ---------- Fig. 3: racks que se suman y espacio reservado para el siguiente ---------- */
+const growthProgress = () => figureScene.growth.p;
+const GROWTH_ANCHORS: readonly Anchor[] = [
+  { name: "CRECIMIENTO", note: "Espacio reservado", at: [GROWTH_OFFSET[0], CABINET.y + 0.9 + GROWTH_OFFSET[1], growthZ(GROWTH.built) + GROWTH_OFFSET[2]], from: 0.78, to: 1.01 },
+];
 
 function NextMarker() {
   const m = useRef<THREE.Mesh>(null);
   useFrame(({ clock }) => {
-    const k = smooth(seg(figureScene.growth.p, 0.85, 1));
+    const k = smooth(seg(growthProgress(), 0.85, 1));
     if (!m.current) return;
     m.current.visible = k > 0.002;
     m.current.scale.setScalar(Math.max(k, 0.001));
-    m.current.position.y = GROWTH.slot + 0.35 + Math.sin(clock.elapsedTime * 2) * 0.05;
+    m.current.position.y = CABINET.y + 0.45 + Math.sin(clock.elapsedTime * 2) * 0.06;
   });
   return (
-    <mesh ref={m} position={[growthLayout.slotX + GROWTH.slot / 2, GROWTH.slot + 0.35, 0]}>
-      <boxGeometry args={[0.32, 0.32, 0.32]} />
-      <meshStandardMaterial color={RED} emissive={RED} emissiveIntensity={0.7} />
+    <mesh ref={m} position={[0, CABINET.y + 0.45, growthZ(GROWTH.built)]}>
+      <boxGeometry args={[0.3, 0.3, 0.3]} />
+      <meshBasicMaterial color={RED_HEX} />
     </mesh>
   );
 }
 
 export function GrowthScene() {
-  const greys = ["#2a2a2a", "#555555", "#8a8a8a", "#f1f1f1"];
+  const labels = useRef<Array<HTMLDivElement | null>>([]);
   return (
-    <SceneCanvas label="Módulos cuadrados que crecen de tamaño sobre una línea base, con un espacio vacío reservado para el siguiente." camera={{ position: [7.2, 6.4, 13.8], fov: 30 }}>
+    <SceneCanvas overlay={anchorLabels(GROWTH_ANCHORS, labels)} label="Dos racks construidos y un espacio vacío, reservado, para el siguiente." camera={{ position: [11, 6, 9], fov: 30 }}>
       <Lights />
-      <Sway amount={0.25}>
-        <group position={[0, -1.1, 0]} rotation-y={-0.3}>
-          <Part pos={[0, -0.03, 0]} size={[growthLayout.total + 1.2, 0.05, 2.6]} fill="#0a0a0a" fillOpacity={0.6} edgeOpacity={0.35} update={() => smooth(seg(figureScene.growth.p, 0, 0.25))} />
-          {growthLayout.cubes.map((c, i) => (
-            <Part
-              key={i}
-              pos={[c.x, c.size / 2, 0]}
-              size={[c.size, c.size, c.size]}
-              fill={greys[i]}
-              fillOpacity={1}
-              edgeOpacity={i === 3 ? 0 : 0.7}
-              update={({ group }) => {
-                const k = easeOut(seg(figureScene.growth.p, 0.15 + i * 0.16, 0.4 + i * 0.16));
-                group.scale.set(Math.max(k, 0.001), Math.max(k, 0.001), Math.max(k, 0.001));
-                group.position.y = (c.size / 2) * k;
-                return Math.min(1, k * 4);
-              }}
-            />
-          ))}
-          <Part
-            pos={[growthLayout.slotX, GROWTH.slot / 2, 0]}
-            size={[GROWTH.slot, GROWTH.slot, GROWTH.slot]}
-            fillOpacity={0.06}
-            edgeOpacity={0.55}
-            update={() => smooth(seg(figureScene.growth.p, 0.7, 0.9))}
-          />
+      <AnchorSync anchors={GROWTH_ANCHORS} labels={labels} progress={growthProgress} />
+      <gridHelper args={[40, 40, "#2c2c2c", "#171717"]} />
+      <Sway amount={0.2}>
+        <group position={GROWTH_OFFSET}>
+          {Array.from({ length: GROWTH.built }, (_, i) => <RackCopy key={i} z={growthZ(i)} a={0.05 + i * 0.25} b={0.45 + i * 0.25} progress={growthProgress} />)}
+          <Cabinet z={growthZ(GROWTH.built)} opacity={0} update={(m) => { m.opacity = 0.6 * smooth(seg(growthProgress(), 0.7, 0.88)); }} />
           <NextMarker />
         </group>
       </Sway>

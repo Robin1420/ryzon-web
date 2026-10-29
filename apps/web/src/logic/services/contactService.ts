@@ -6,6 +6,7 @@ export type SubmitResult = { ok: true } | { ok: false; reason: "not-configured" 
  * Punto único de envío del formulario. Aún no hay destino confirmado (correo, API o CRM),
  * así que devuelve "not-configured". Cuando exista, solo hay que implementar esta función.
  */
-export async function submitContact(_values: ContactValues): Promise<SubmitResult> {
+export async function submitContact(values: ContactValues): Promise<SubmitResult> {
+  void values;
   return { ok: false, reason: "not-configured" };
 }
