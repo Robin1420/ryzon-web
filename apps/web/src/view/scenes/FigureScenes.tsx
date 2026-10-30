@@ -7,7 +7,7 @@ import { cloneRack } from "@/logic/engines/rackModel";
 import { easeOut, figureScene, seg, smooth } from "@/logic/engines/sceneState";
 import { useRackModel } from "@/logic/hooks/useRackModel";
 import { AnchorSync, anchorLabels, type Anchor } from "./AnchorSync";
-import { Lights, Part, Sway } from "./parts";
+import { Lights, Part, Sway, useScenePalette } from "./parts";
 import { SceneCanvas } from "./SceneCanvas";
 
 const lerp3 = (a: readonly number[], b: readonly number[], k: number) => [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k] as const;
@@ -16,12 +16,13 @@ const RED_HEX = "#F40612";
 
 /** Contorno de un gabinete de rack (sin relleno). */
 function Cabinet({ z = 0, opacity = 0.35, update }: { z?: number; opacity?: number; update?: (m: THREE.LineBasicMaterial) => void }) {
+  const pal = useScenePalette();
   const geo = useMemo(() => wire([CABINET.x, CABINET.y, CABINET.z]), []);
   const mat = useRef<THREE.LineBasicMaterial>(null);
   useFrame(() => { if (mat.current) update?.(mat.current); });
   return (
     <lineSegments geometry={geo} position={[0, CABINET.y / 2, z]}>
-      <lineBasicMaterial ref={mat} color="#ffffff" transparent opacity={opacity} />
+      <lineBasicMaterial ref={mat} color={pal.edge} transparent opacity={opacity} />
     </lineSegments>
   );
 }
@@ -44,6 +45,7 @@ function RackCopy({ z, a, b, progress }: { z: number; a: number; b: number; prog
 const fitProgress = () => figureScene.fit.p;
 
 function Slab({ i }: { i: number }) {
+  const pal = useScenePalette();
   const s = FIT_SLABS[i];
   const custom = s.kind === "custom";
   const place = (group: THREE.Group, offset: V3 = [0, 0, 0]) => {
@@ -53,12 +55,12 @@ function Slab({ i }: { i: number }) {
     group.rotation.y = s.spin * (1 - k);
     return Math.min(1, k * 3);
   };
-  const fill = s.kind === "light" ? "#f1f1f1" : s.kind === "dark" ? "#1c1c1c" : custom ? "#4a0509" : "#0a0a0a";
-  const edge = custom ? RED_HEX : "#ffffff";
+  const fill = s.kind === "light" ? pal.slabLight : s.kind === "dark" ? pal.slabDark : custom ? pal.customFill : pal.slabLine;
+  const edge = custom ? RED_HEX : pal.edge;
   return (
     <>
       <Part pos={[0, s.y, 0]} size={s.size} fill={fill} fillOpacity={s.kind === "line" ? 0.75 : 1} edge={edge} edgeOpacity={s.kind === "light" ? 0 : 0.85} update={({ group }) => place(group)} />
-      {custom && <Part pos={[0, s.y, 0]} size={FIT_TAB.size} fill="#4a0509" fillOpacity={0.9} edge={RED_HEX} edgeOpacity={1} update={({ group }) => place(group, FIT_TAB.offset)} />}
+      {custom && <Part pos={[0, s.y, 0]} size={FIT_TAB.size} fill={pal.customFill} fillOpacity={0.9} edge={RED_HEX} edgeOpacity={1} update={({ group }) => place(group, FIT_TAB.offset)} />}
     </>
   );
 }
@@ -84,6 +86,7 @@ const PRECISION_ANCHORS: readonly Anchor[] = [
 ];
 
 function Ruler() {
+  const pal = useScenePalette();
   const spine = useRef<THREE.Mesh>(null);
   const ticks = useRef<Array<THREE.Mesh | null>>([]);
   const leader = useRef<THREE.Mesh>(null);
@@ -104,12 +107,12 @@ function Ruler() {
     <>
       <mesh ref={spine} position={[SCALE.x, 0, SCALE.z]}>
         <boxGeometry args={[0.025, CABINET.y, 0.025]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.7} />
+        <meshBasicMaterial color={pal.edge} transparent opacity={0.7} />
       </mesh>
       {Array.from({ length: SCALE.ticks + 1 }, (_, i) => (
         <mesh key={i} ref={(m) => { ticks.current[i] = m; }} position={[SCALE.x, i * U, SCALE.z + 0.14]}>
           <boxGeometry args={[0.02, 0.02, i % 6 === 0 ? 0.42 : 0.26]} />
-          <meshBasicMaterial color="#ffffff" transparent opacity={0.8} />
+          <meshBasicMaterial color={pal.edge} transparent opacity={0.8} />
         </mesh>
       ))}
       <mesh ref={leader} position={[SCALE.x, markY, SCALE.z]}>
@@ -164,12 +167,13 @@ function NextMarker() {
 }
 
 export function GrowthScene() {
+  const pal = useScenePalette();
   const labels = useRef<Array<HTMLDivElement | null>>([]);
   return (
     <SceneCanvas overlay={anchorLabels(GROWTH_ANCHORS, labels)} label="Dos racks construidos y un espacio vacío, reservado, para el siguiente." camera={{ position: [11, 6, 9], fov: 30 }}>
       <Lights />
       <AnchorSync anchors={GROWTH_ANCHORS} labels={labels} progress={growthProgress} />
-      <gridHelper args={[40, 40, "#2c2c2c", "#171717"]} />
+      <gridHelper key={pal.edge} args={[40, 40, pal.grid[0], pal.grid[1]]} />
       <Sway amount={0.2}>
         <group position={GROWTH_OFFSET}>
           {Array.from({ length: GROWTH.built }, (_, i) => <RackCopy key={i} z={growthZ(i)} a={0.05 + i * 0.25} b={0.45 + i * 0.25} progress={growthProgress} />)}

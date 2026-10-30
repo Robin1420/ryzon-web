@@ -8,7 +8,7 @@ import { easeOut, seg, servicesScene, smooth } from "@/logic/engines/sceneState"
 import { useRackModel } from "@/logic/hooks/useRackModel";
 import { lerp } from "@/logic/utils/math";
 import { AnchorSync, anchorLabels } from "./AnchorSync";
-import { Lights, Part, RED, WHITE } from "./parts";
+import { Lights, Part, RED, WHITE, useScenePalette } from "./parts";
 import { SceneCanvas } from "./SceneCanvas";
 
 const appear = (a: number, b: number) => () => smooth(seg(servicesScene.t, a, b));
@@ -32,19 +32,18 @@ function Rack({ index, source }: { index: number; source: THREE.Object3D }) {
 /** Línea que se dibuja de punta a punta entre dos instantes. Puede cambiar de color (falla). */
 function Cable({ from, to, start, end, tint }: { from: V3; to: V3; start: number; end: number; tint?: (t: number) => THREE.Color }) {
   const N = 24;
+  const pal = useScenePalette();
   const { line, mat } = useMemo(() => {
     const pts = Array.from({ length: N + 1 }, (_, i) => new THREE.Vector3(lerp(from[0], to[0], i / N), lerp(from[1], to[1], i / N), lerp(from[2], to[2], i / N)));
-    const mat = new THREE.LineBasicMaterial({ color: "#ffffff", transparent: true, opacity: 0.75 });
+    const mat = new THREE.LineBasicMaterial({ color: pal.ink, transparent: true, opacity: 0.75 });
     return { line: new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), mat), mat };
-  }, [from, to]);
+  }, [from, to, pal.ink]);
   useFrame(() => {
     const t = servicesScene.t, k = seg(t, start, end);
     line.geometry.setDrawRange(0, Math.floor(k * (N + 1)));
     line.visible = k > 0;
-    if (tint) {
-      mat.color.copy(tint(t));
-      mat.opacity = tint(t) === RED ? 0.55 + 0.45 * Math.sin(t * 40) ** 2 : 0.75;
-    }
+    mat.color.copy(tint ? tint(t) : WHITE);
+    mat.opacity = tint && tint(t) === RED ? 0.55 + 0.45 * Math.sin(t * 40) ** 2 : 0.75;
   });
   return <primitive object={line} />;
 }
@@ -54,10 +53,11 @@ const faultTint = (t: number) => (faultActive(t) ? RED : WHITE);
 
 /** Equipo central, troncal y bajadas a cada rack: la "arquitectura de red". */
 function Backbone() {
+  const pal = useScenePalette();
   const reach = rackZ(RACK.count - 1);
   return (
     <>
-      <Part pos={HUB} size={[1.2, 0.36, 1.2]} fill="#161616" fillOpacity={0.9} edgeOpacity={0.9} update={appear(0.15, 0.3)} />
+      <Part pos={HUB} size={[1.2, 0.36, 1.2]} fill={pal.hub} fillOpacity={0.9} edgeOpacity={0.9} update={appear(0.15, 0.3)} />
       <Cable from={[HUB[0], HUB[1] - 0.18, HUB[2]]} to={[HUB[0], BUS_Y, HUB[2]]} start={0.28} end={0.4} />
       <Cable from={[HUB[0], BUS_Y, 0]} to={[HUB[0], BUS_Y, reach]} start={0.4} end={0.7} />
       <Cable from={[HUB[0], BUS_Y, 0]} to={[HUB[0], BUS_Y, -reach]} start={0.4} end={0.7} />
@@ -66,7 +66,7 @@ function Backbone() {
         return (
           <group key={i}>
             <Cable from={[HUB[0], BUS_Y, z]} to={[HUB[0], RACK_TOP_Y, z]} start={0.62 + d * 0.06} end={0.82 + d * 0.06} tint={i === RACK.main ? faultTint : undefined} />
-            <Part pos={[HUB[0], RACK_TOP_Y + 0.08, z]} size={[0.24, 0.16, 0.24]} fill="#ffffff" fillOpacity={1} edgeOpacity={0} solid update={appear(0.8 + d * 0.06, 0.9 + d * 0.06)} />
+            <Part pos={[HUB[0], RACK_TOP_Y + 0.08, z]} size={[0.24, 0.16, 0.24]} fill={pal.ink} fillOpacity={1} edgeOpacity={0} solid update={appear(0.8 + d * 0.06, 0.9 + d * 0.06)} />
           </group>
         );
       })}
@@ -119,6 +119,7 @@ function Monitoring() {
 
 /** Escena 3: capas de aplicación que suben desde la laptop. */
 function SoftwareLayers() {
+  const pal = useScenePalette();
   const connector = useRef<THREE.Mesh>(null);
   const top = UI_LAYERS[UI_LAYERS.length - 1].y;
   useFrame(() => {
@@ -132,7 +133,7 @@ function SoftwareLayers() {
     <>
       <mesh ref={connector} position={[UI_CENTER_X, LAPTOP[1], 0]}>
         <boxGeometry args={[0.025, 1, 0.025]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.5} />
+        <meshBasicMaterial color={pal.ink} transparent opacity={0.5} />
       </mesh>
       {UI_LAYERS.map((l, i) => <UiLayer key={i} y={l.y} delay={l.delay} />)}
     </>
@@ -140,6 +141,7 @@ function SoftwareLayers() {
 }
 
 function UiLayer({ y, delay }: { y: number; delay: number }) {
+  const pal = useScenePalette();
   const g = useRef<THREE.Group>(null);
   useFrame(() => {
     if (!g.current) return;
@@ -149,24 +151,25 @@ function UiLayer({ y, delay }: { y: number; delay: number }) {
   const rows = [-0.55, -0.15, 0.25, 0.65];
   return (
     <group ref={g} position={[UI_CENTER_X, LAPTOP[1], 0]}>
-      <Part pos={[0, 0, 0]} size={[UI_SIZE.x, 0.05, UI_SIZE.z]} fill="#0d0d0d" fillOpacity={0.85} edgeOpacity={0.75} update={vis} />
+      <Part pos={[0, 0, 0]} size={[UI_SIZE.x, 0.05, UI_SIZE.z]} fill={pal.ui} fillOpacity={0.85} edgeOpacity={0.75} update={vis} />
       {rows.map((z, i) => (
-        <Part key={i} pos={[-0.35, 0.05, z]} size={[1.5 - (i % 2) * 0.35, 0.04, 0.1]} fill="#ffffff" fillOpacity={0.85} edgeOpacity={0} solid update={vis} />
+        <Part key={i} pos={[-0.35, 0.05, z]} size={[1.5 - (i % 2) * 0.35, 0.04, 0.1]} fill={pal.ink} fillOpacity={0.85} edgeOpacity={0} solid update={vis} />
       ))}
-      <Part pos={[0.85, 0.07, -0.55]} size={[0.5, 0.08, 0.35]} fill="#ffffff" fillOpacity={0.2} edgeOpacity={0.8} update={vis} />
+      <Part pos={[0.85, 0.07, -0.55]} size={[0.5, 0.08, 0.35]} fill={pal.ink} fillOpacity={0.2} edgeOpacity={0.8} update={vis} />
     </group>
   );
 }
 
 /** Escena 4: la unidad sale, se repara y vuelve a su lugar. */
 function RepairUnit() {
+  const pal = useScenePalette();
   const D = FAULT_UNIT.depth;
   return (
-    <Part pos={[RACK.front, FAULT_UNIT.y, 0]} size={[D, FAULT_UNIT.h, FAULT_UNIT.w]} fill="#3a0508" fillOpacity={0.6} edge="#F40612" edgeOpacity={0.95} update={({ group, fill, edge }) => {
+    <Part pos={[RACK.front, FAULT_UNIT.y, 0]} size={[D, FAULT_UNIT.h, FAULT_UNIT.w]} fill={pal.faultFill} fillOpacity={0.6} edge="#F40612" edgeOpacity={0.95} update={({ group, fill, edge }) => {
       const t = servicesScene.t, slide = smooth(seg(t, 3.05, 3.45)), ok = seg(t, 3.35, 3.5);
       group.position.x = RACK.front - D / 2 + 0.05 + 1.3 * (1 - slide);
       edge.color.copy(RED).lerp(WHITE, ok);
-      fill.color.set("#3a0508").lerp(WHITE.clone().multiplyScalar(0.25), ok);
+      fill.color.set(pal.faultFill).lerp(new THREE.Color(pal.okFill), ok);
       return smooth(seg(t, 3.0, 3.1)) * (1 - smooth(seg(t, 3.6, 3.75)));
     }} />
   );
@@ -193,9 +196,10 @@ function Rig() {
 
 function DataCenter() {
   const source = useRackModel();
+  const pal = useScenePalette();
   return (
     <>
-      <gridHelper args={[48, 48, "#2c2c2c", "#171717"]} />
+      <gridHelper key={pal.edge} args={[48, 48, pal.grid[0], pal.grid[1]]} />
       {source && Array.from({ length: RACK.count }, (_, i) => <Rack key={i} index={i} source={source} />)}
       <Backbone />
       <Monitoring />
@@ -206,11 +210,12 @@ function DataCenter() {
 }
 
 export function ServicesScene() {
+  const pal = useScenePalette();
   const labels = useRef<Array<HTMLDivElement | null>>([]);
   const overlay = anchorLabels(LABELS, labels);
   return (
     <SceneCanvas overlay={overlay} label="Data center en 3D: una hilera de racks se conecta, se detecta una falla en un equipo, aparecen capas de software desde la consola y la unidad con falla se repara." camera={{ position: [17, 7, 8], fov: 30 }}>
-      <fog attach="fog" args={["#050505", 26, 52]} />
+      <fog attach="fog" args={[pal.fog, 26, 52]} />
       <Lights />
       <Rig />
       <AnchorSync anchors={LABELS} labels={labels} progress={() => servicesScene.t} />

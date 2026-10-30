@@ -1,3 +1,6 @@
+export type Theme = "dark" | "light";
+export const THEME_KEY = "ryzon-theme";
+
 /** Tokens para código (canvas, SVG, animaciones). Deben coincidir con tokens.css. */
 export const colors = {
   bg: "#050505",
@@ -31,3 +34,12 @@ export const motion = {
 };
 
 
+
+/** Colores para canvas y escenas 3D, por tema. Deben coincidir con tokens.css. */
+export const palette = {
+  dark: { bg: "#050505", ink: "#ffffff", inkRgb: "255,255,255", red: "#F40612", redRgb: "244,6,18" },
+  light: { bg: "#f6f5f2", ink: "#0b0b0c", inkRgb: "11,11,12", red: "#d50511", redRgb: "213,5,17" },
+} as const;
+
+export const currentTheme = (): Theme =>
+  typeof document !== "undefined" && document.documentElement.dataset.theme === "light" ? "light" : "dark";

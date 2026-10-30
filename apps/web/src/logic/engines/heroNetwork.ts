@@ -1,4 +1,4 @@
-import { colors } from "@ryzon/tokens";
+import { currentTheme, palette } from "@ryzon/tokens";
 import { clamp, lerp, seeded } from "../utils/math";
 
 type Node = { hx: number; hy: number; x: number; y: number; vx: number; vy: number; ph: number; r: number; big: boolean };
@@ -47,13 +47,14 @@ export function createHeroNetwork() {
 
     draw(ctx: CanvasRenderingContext2D) {
       ctx.clearRect(0, 0, W, H);
+      const c = palette[currentTheme()];
       const L = linkDistance();
       pairs = [];
       ctx.lineWidth = 1;
       for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
         const a = nodes[i], b = nodes[j], d = Math.hypot(a.x - b.x, a.y - b.y);
         if (d < L) {
-          ctx.strokeStyle = `rgba(255,255,255,${(1 - d / L) * 0.34})`;
+          ctx.strokeStyle = `rgba(${c.inkRgb},${(1 - d / L) * 0.34})`;
           ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
           pairs.push([a, b]);
         }
@@ -63,19 +64,19 @@ export function createHeroNetwork() {
       for (const n of nodes) {
         const d = Math.hypot(n.x - mouse.x, n.y - mouse.y);
         if (d < 210) {
-          ctx.strokeStyle = `rgba(255,255,255,${(1 - d / 210) * 0.5})`;
+          ctx.strokeStyle = `rgba(${c.inkRgb},${(1 - d / 210) * 0.5})`;
           ctx.beginPath(); ctx.moveTo(mouse.x, mouse.y); ctx.lineTo(n.x, n.y); ctx.stroke();
           if (d < nd) { nd = d; near = n; }
         }
       }
       for (const n of nodes) {
-        ctx.fillStyle = n === near ? colors.red : "rgba(255,255,255,.88)";
+        ctx.fillStyle = n === near ? c.red : `rgba(${c.inkRgb},.88)`;
         const s = n.big ? n.r * 2.2 : n.r;
         if (n.big) ctx.fillRect(n.x - s, n.y - s, s * 2, s * 2);
         else { ctx.beginPath(); ctx.arc(n.x, n.y, n === near ? s * 1.8 : s, 0, 6.283); ctx.fill(); }
       }
-      if (near) { ctx.strokeStyle = "rgba(244,6,18,.7)"; ctx.beginPath(); ctx.arc(near.x, near.y, 9, 0, 6.283); ctx.stroke(); }
-      ctx.fillStyle = "#fff";
+      if (near) { ctx.strokeStyle = `rgba(${c.redRgb},.7)`; ctx.beginPath(); ctx.arc(near.x, near.y, 9, 0, 6.283); ctx.stroke(); }
+      ctx.fillStyle = c.ink;
       for (const s of signals) ctx.fillRect(lerp(s.a.x, s.b.x, s.k) - 2, lerp(s.a.y, s.b.y, s.k) - 2, 4, 4);
     },
   };

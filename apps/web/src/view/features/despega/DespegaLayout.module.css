@@ -1,6 +1,6 @@
 .bar { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; gap: 24px; height: var(--rz-nav-h); padding-inline: var(--rz-pad); border-bottom: 1px solid var(--rz-line-2); }
 .back { font-family: var(--rz-font-mono); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--rz-mut); }
-.back:hover { color: #fff; }
+.back:hover { color: var(--rz-ink); }
 .main { min-height: 70vh; }
 .footer { position: relative; z-index: 1; border-top: 1px solid var(--rz-line-2); padding-block: 28px; }
 .footRow { display: flex; flex-wrap: wrap; gap: 16px 40px; justify-content: space-between; align-items: center; padding-inline: var(--rz-pad); max-width: var(--rz-max); margin-inline: auto; }

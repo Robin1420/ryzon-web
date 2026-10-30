@@ -1,11 +1,11 @@
-.btn { position: relative; display: inline-flex; align-items: center; gap: 18px; padding: 20px 28px 20px 26px; border: 1px solid #fff; font-family: var(--rz-font-mono); font-size: 0.82rem; letter-spacing: 0.03em; background: none; color: var(--rz-fg); overflow: hidden; isolation: isolate; transition: color 0.4s; }
-.btn::before { content: ""; position: absolute; inset: 0; background: #fff; transform: scaleX(0); transform-origin: 0 50%; transition: transform 0.5s var(--rz-ease-out); z-index: -1; }
-.btn:hover, .btn:focus-visible { color: #000; }
+.btn { position: relative; display: inline-flex; align-items: center; gap: 18px; padding: 20px 28px 20px 26px; border: 1px solid var(--rz-ink); font-family: var(--rz-font-mono); font-size: 0.82rem; letter-spacing: 0.03em; background: none; color: var(--rz-fg); overflow: hidden; isolation: isolate; transition: color 0.4s; }
+.btn::before { content: ""; position: absolute; inset: 0; background: var(--rz-ink); transform: scaleX(0); transform-origin: 0 50%; transition: transform 0.5s var(--rz-ease-out); z-index: -1; }
+.btn:hover, .btn:focus-visible { color: var(--rz-ink-contrast); }
 .btn:hover::before, .btn:focus-visible::before { transform: scaleX(1); }
 .sq { width: 8px; height: 8px; background: var(--rz-red); flex: none; }
 .ar { width: 34px; height: 1px; background: currentColor; position: relative; transition: width 0.4s; }
 .ar::after { content: ""; position: absolute; right: 0; top: -3px; width: 7px; height: 7px; border-top: 1px solid currentColor; border-right: 1px solid currentColor; transform: rotate(45deg); }
 .btn:hover .ar { width: 48px; }
-.solid { background: #fff; color: #000; }
+.solid { background: var(--rz-ink); color: var(--rz-ink-contrast); }
 .solid::before { background: var(--rz-red); }
 .solid:hover, .solid:focus-visible { color: #fff; border-color: var(--rz-red); }

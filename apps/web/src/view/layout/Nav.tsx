@@ -4,6 +4,7 @@ import { BrandMark, Button, NavLink } from "@ryzon/ui";
 import { nav, sectionToNav } from "@/data/site";
 import { useActiveSection } from "@/logic/hooks/useActiveSection";
 import { MotionToggle } from "./MotionToggle";
+import { ThemeToggle } from "./ThemeToggle";
 import s from "./Nav.module.css";
 
 export function Nav() {
@@ -25,6 +26,7 @@ export function Nav() {
           {nav.map((n) => <li key={n.id}><NavLink href={n.href} active={active === n.id}>{n.label}</NavLink></li>)}
         </ul>
         <div className={s.actions}>
+          <ThemeToggle />
           <MotionToggle />
           <a className={s.cta} href="#formulario">Hablemos</a>
           <button type="button" className={s.burger} aria-expanded={open} aria-controls="menu" aria-label={open ? "Cerrar menú" : "Abrir menú"} onClick={() => setOpen((o) => !o)}>
