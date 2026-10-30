@@ -17,7 +17,7 @@ export const despegaApp = {
 const UPDATED = "30 de octubre de 2026";
 
 /** Se cambia aquí cuando haya correo real. Debe coincidir con `legal_contact` en la app. */
-const CONTACT = "[correo de contacto]";
+const CONTACT = "robinzon.1420@gmail.com";
 
 export const despegaTerms: LegalDocument = {
   slug: "terminos",
