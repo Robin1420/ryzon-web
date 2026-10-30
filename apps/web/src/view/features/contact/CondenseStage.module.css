@@ -5,4 +5,4 @@
 .count { position: absolute; left: var(--rz-pad); bottom: 34px; z-index: 2; }
 .count b { color: #fff; font-weight: 500; }
 .text { position: absolute; z-index: 2; left: var(--rz-pad); right: var(--rz-pad); bottom: 12vh; margin: 0; text-align: center; font-family: var(--rz-font-display); font-weight: 800; font-stretch: 114%; letter-spacing: -0.035em; line-height: 0.93; font-size: clamp(1.8rem, 4.6vw, 4.6rem); opacity: 0; }
-@media (prefers-reduced-motion: reduce) { .stage { height: 80vh; } }
+@media (prefers-reduced-motion: reduce) { :global(html:not([data-motion="on"])) .stage { height: 80vh; } }

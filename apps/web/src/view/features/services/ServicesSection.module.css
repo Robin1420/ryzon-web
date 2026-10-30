@@ -46,10 +46,10 @@
 
 /* Movimiento reducido: los cuatro servicios se leen uno tras otro y el diagrama queda en su estado final. */
 @media (prefers-reduced-motion: reduce) {
-  .frame { height: auto; display: block; padding-top: 40px; }
-  .diagram { height: min(80vw, 640px); margin-bottom: 40px; }
-  .panels { min-height: 0; }
-  .panel { position: static; opacity: 1 !important; transform: none !important; margin-bottom: 56px; padding-bottom: 40px; border-bottom: 1px solid var(--rz-line-2); }
-  .tabs, .count, .caps, .diagramTop { display: none; }
-  .credit { position: static; max-width: none; padding: 8px 16px; text-align: left; }
+  :global(html:not([data-motion="on"])) .frame { height: auto; display: block; padding-top: 40px; }
+  :global(html:not([data-motion="on"])) .diagram { height: min(80vw, 640px); margin-bottom: 40px; }
+  :global(html:not([data-motion="on"])) .panels { min-height: 0; }
+  :global(html:not([data-motion="on"])) .panel { position: static; opacity: 1 !important; transform: none !important; margin-bottom: 56px; padding-bottom: 40px; border-bottom: 1px solid var(--rz-line-2); }
+  :global(html:not([data-motion="on"])) :is(.tabs, .count, .caps, .diagramTop) { display: none; }
+  :global(html:not([data-motion="on"])) .credit { position: static; max-width: none; padding: 8px 16px; text-align: left; }
 }

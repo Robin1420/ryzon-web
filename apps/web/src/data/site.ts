@@ -128,3 +128,8 @@ export const meta = {
   locale: "es_PE",
   brand: "Ryzon",
 };
+
+export const motionToggle = {
+  on: "Activar animaciones",
+  off: "Reducir animaciones",
+} as const;

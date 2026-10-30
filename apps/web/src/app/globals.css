@@ -17,4 +17,4 @@ body::after { content: ""; position: fixed; inset: 0; z-index: 150; pointer-even
 /* Con cursor propio activo, se oculta el del sistema */
 html.has-cursor, html.has-cursor a, html.has-cursor button, html.has-cursor select, html.has-cursor label { cursor: none; }
 
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@media (prefers-reduced-motion: reduce) { html:not([data-motion="on"]) { scroll-behavior: auto; } }
