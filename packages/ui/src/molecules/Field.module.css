@@ -1,5 +1,5 @@
 .field { position: relative; margin-bottom: 26px; }
 .field::after { content: ""; position: absolute; left: 0; bottom: 0; height: 1px; width: 100%; background: var(--rz-red); transform: scaleX(0); transform-origin: 0 50%; transition: transform 0.45s; pointer-events: none; }
 .field:focus-within::after { transform: scaleX(1); }
-.err { margin: 6px 0 0; font-size: 0.84rem; color: #ff6b73; }
+.err { margin: 6px 0 0; font-size: 0.84rem; color: var(--rz-err); }
 .bad { }

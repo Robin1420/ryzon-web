@@ -128,6 +128,12 @@ export const meta = {
   brand: "Ryzon",
 };
 
+export const themeToggle = {
+  toLight: "Cambiar a modo claro",
+  toDark: "Cambiar a modo oscuro",
+  short: { light: "Modo claro", dark: "Modo oscuro" },
+} as const;
+
 export const motionToggle = {
   on: { long: "Activar animaciones", short: "Animar" },
   off: { long: "Reducir animaciones", short: "Quieto" },

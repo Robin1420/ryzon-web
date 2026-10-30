@@ -25,13 +25,20 @@ export const metadata: Metadata = {
   other: { "geo.region": "PE", "geo.placename": "Perú" },
 };
 
-export const viewport: Viewport = { themeColor: "#050505", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f6f5f2" },
+    { media: "(prefers-color-scheme: dark)", color: "#050505" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+};
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="es-PE" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: `try{if(localStorage.getItem("ryzon-motion")==="on")document.documentElement.dataset.motion="on"}catch(e){}` }} />
+        <script dangerouslySetInnerHTML={{ __html: `try{var d=document.documentElement,t=localStorage.getItem("ryzon-theme");if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";d.dataset.theme=t;d.style.colorScheme=t;if(localStorage.getItem("ryzon-motion")==="on")d.dataset.motion="on"}catch(e){}` }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}

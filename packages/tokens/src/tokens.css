@@ -9,6 +9,13 @@
   --rz-line: rgba(255, 255, 255, 0.18);
   --rz-line-2: rgba(255, 255, 255, 0.08);
   --rz-red: #f40612;
+  --rz-ink: #ffffff;
+  --rz-ink-contrast: #000000;
+  --rz-bg-rgb: 5, 5, 5;
+  --rz-ink-rgb: 255, 255, 255;
+  --rz-tint: rgba(255, 255, 255, 0.012);
+  --rz-err: #ff6b73;
+  color-scheme: dark;
 
   --rz-font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
   --rz-font-body: "Inter Tight", "Helvetica Neue", Arial, sans-serif;
@@ -19,4 +26,24 @@
   --rz-max: 1680px;
 
   --rz-ease-out: cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+/* Modo claro: mismos nombres, valores propios. El rojo baja un punto para mantener el contraste. */
+:root[data-theme="light"] {
+  --rz-bg: #f6f5f2;
+  --rz-bg-2: #edebe6;
+  --rz-fg: #0b0b0c;
+  --rz-fg-soft: #2a2b2e;
+  --rz-mut: #55575c;
+  --rz-dim: #62656c;
+  --rz-line: rgba(0, 0, 0, 0.18);
+  --rz-line-2: rgba(0, 0, 0, 0.09);
+  --rz-red: #d50511;
+  --rz-ink: #0b0b0c;
+  --rz-ink-contrast: #f6f5f2;
+  --rz-bg-rgb: 246, 245, 242;
+  --rz-ink-rgb: 11, 11, 12;
+  --rz-tint: rgba(0, 0, 0, 0.025);
+  --rz-err: #c4222c;
+  color-scheme: light;
 }

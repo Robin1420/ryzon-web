@@ -3,9 +3,29 @@ import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef, type ReactNode } from "react";
 import * as THREE from "three";
 import type { V3 } from "@/data/datacenter";
+import { useTheme } from "@/logic/hooks/useTheme";
 
 export const RED = new THREE.Color("#F40612");
+/** "Tinta" de las escenas: blanco en modo oscuro, casi negro en modo claro (se actualiza con el tema). */
 export const WHITE = new THREE.Color("#ffffff");
+
+export type ScenePalette = {
+  edge: string; ink: string; fog: string; grid: [string, string];
+  part: string; hub: string; ui: string; slabLight: string; slabDark: string; slabLine: string;
+  customFill: string; faultFill: string; okFill: string;
+};
+const PALETTES: Record<"dark" | "light", ScenePalette> = {
+  dark: { edge: "#ffffff", ink: "#ffffff", fog: "#050505", grid: ["#2c2c2c", "#171717"], part: "#0c0c0c", hub: "#161616", ui: "#0d0d0d", slabLight: "#f1f1f1", slabDark: "#1c1c1c", slabLine: "#0a0a0a", customFill: "#4a0509", faultFill: "#3a0508", okFill: "#404040" },
+  light: { edge: "#0b0b0c", ink: "#0b0b0c", fog: "#f6f5f2", grid: ["#cfcdc7", "#e2e0da"], part: "#e6e4de", hub: "#dcdad4", ui: "#e9e7e1", slabLight: "#2a2b2e", slabDark: "#cfcdc7", slabLine: "#ecebe6", customFill: "#f7c8cb", faultFill: "#f4c6c9", okFill: "#cfcdc7" },
+};
+
+/** Paleta de la escena según el tema activo. */
+export function useScenePalette(): ScenePalette {
+  const { theme } = useTheme();
+  const p = PALETTES[theme];
+  WHITE.set(p.ink);
+  return p;
+}
 
 type Api = { group: THREE.Group; fill: THREE.MeshStandardMaterial; edge: THREE.LineBasicMaterial };
 type PartProps = {
@@ -22,7 +42,8 @@ type PartProps = {
 };
 
 /** Caja con relleno y aristas nítidas: el lenguaje visual de todas las escenas. */
-export function Part({ size, pos, fill = "#0c0c0c", fillOpacity = 0.9, edge = "#ffffff", edgeOpacity = 0.6, solid, update }: PartProps) {
+export function Part({ size, pos, fill, fillOpacity = 0.9, edge, edgeOpacity = 0.6, solid, update }: PartProps) {
+  const pal = useScenePalette();
   const group = useRef<THREE.Group>(null);
   const fillMat = useRef<THREE.MeshStandardMaterial>(null);
   const edgeMat = useRef<THREE.LineBasicMaterial>(null);
@@ -41,10 +62,10 @@ export function Part({ size, pos, fill = "#0c0c0c", fillOpacity = 0.9, edge = "#
     <group ref={group} position={pos}>
       <mesh>
         <boxGeometry args={size} />
-        <meshStandardMaterial ref={fillMat} color={fill} transparent depthWrite={!!solid} roughness={0.55} metalness={0.2} />
+        <meshStandardMaterial ref={fillMat} color={fill ?? pal.part} transparent depthWrite={!!solid} roughness={0.55} metalness={0.2} />
       </mesh>
       <lineSegments geometry={edges}>
-        <lineBasicMaterial ref={edgeMat} color={edge} transparent />
+        <lineBasicMaterial ref={edgeMat} color={edge ?? pal.edge} transparent />
       </lineSegments>
     </group>
   );

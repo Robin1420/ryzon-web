@@ -1,0 +1,5 @@
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 14px; background: none; color: var(--rz-fg); border: 1px solid var(--rz-line); font-family: var(--rz-font-mono); font-size: 0.72rem; letter-spacing: 0.04em; cursor: pointer; transition: background 0.3s, color 0.3s, border-color 0.3s; }
+.btn:hover { background: var(--rz-ink); color: var(--rz-ink-contrast); border-color: var(--rz-ink); }
+.btn:focus-visible { outline: 2px solid var(--rz-red); outline-offset: 2px; }
+.icon { flex: none; }
+@media (max-width: 1000px) { .btn { width: 44px; height: 44px; padding: 0; } .text { display: none; } }

@@ -16,19 +16,19 @@
 .topics li { font-family: var(--rz-font-mono); font-size: 0.68rem; color: var(--rz-mut); border: 1px solid var(--rz-line); padding: 4px 8px; }
 .note { margin-top: 12px; max-width: 32em; }
 .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.diagram { position: relative; overflow: hidden; border: 1px solid var(--rz-line); background: rgba(255, 255, 255, 0.012); min-height: 0; display: flex; }
-.diagram::before, .diagram::after { content: ""; position: absolute; width: 14px; height: 14px; border: 1px solid #fff; }
+.diagram { position: relative; overflow: hidden; border: 1px solid var(--rz-line); background: var(--rz-tint); min-height: 0; display: flex; }
+.diagram::before, .diagram::after { content: ""; position: absolute; width: 14px; height: 14px; border: 1px solid var(--rz-ink); }
 .diagram::before { left: -1px; top: -1px; border-right: 0; border-bottom: 0; }
 .diagram::after { right: -1px; bottom: -1px; border-left: 0; border-top: 0; }
 .diagramTop { position: absolute; left: 16px; right: 16px; top: 12px; display: flex; justify-content: space-between; z-index: 2; }
 .caps { position: absolute; left: 16px; right: 16px; bottom: 12px; height: 1.4em; z-index: 2; font-family: var(--rz-font-mono); font-size: 0.74rem; color: var(--rz-mut); }
-.credit { position: absolute; right: 12px; bottom: 8px; z-index: 3; margin: 0; padding: 4px 6px; background: rgba(5, 5, 5, 0.82); max-width: 42%; text-align: right; font-family: var(--rz-font-mono); font-size: 0.62rem; line-height: 1.45; color: var(--rz-mut); }
+.credit { position: absolute; right: 12px; bottom: 8px; z-index: 3; margin: 0; padding: 4px 6px; background: rgba(var(--rz-bg-rgb), 0.82); max-width: 42%; text-align: right; font-family: var(--rz-font-mono); font-size: 0.62rem; line-height: 1.45; color: var(--rz-mut); }
 .credit a { text-decoration: underline; text-underline-offset: 2px; }
-.credit a:hover { color: #fff; }
+.credit a:hover { color: var(--rz-ink); }
 .cap { position: absolute; left: 0; bottom: 0; display: flex; align-items: center; gap: 0.7em; }
 .cap i { width: 7px; height: 7px; background: var(--rz-dim); }
 .alert i { background: var(--rz-red); }
-.ok i { background: #fff; }
+.ok i { background: var(--rz-ink); }
 
 @media (max-width: 1000px) { .introTitle, .introText { grid-column: 1 / -1; } }
 @media (max-width: 899px) {
