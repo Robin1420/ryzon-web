@@ -1,5 +1,6 @@
 .nav { position: fixed; left: 0; right: 0; top: 0; height: var(--rz-nav-h); z-index: 110; display: flex; align-items: center; justify-content: space-between; padding-inline: var(--rz-pad); background: rgba(5, 5, 5, 0.72); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--rz-line-2); }
 .links { display: flex; gap: clamp(18px, 3vw, 44px); list-style: none; margin: 0; padding: 0; }
+.actions { display: flex; align-items: center; gap: 12px; }
 .cta { font-family: var(--rz-font-mono); font-size: 0.76rem; border: 1px solid var(--rz-line); padding: 11px 18px; transition: background 0.3s, color 0.3s, border-color 0.3s; }
 .cta:hover { background: #fff; color: #000; border-color: #fff; }
 .burger { display: none; width: 44px; height: 44px; border: 1px solid var(--rz-line); background: none; position: relative; }
