@@ -1,3 +1,7 @@
-.btn { position: fixed; left: 16px; bottom: 16px; z-index: 150; padding: 10px 14px; background: rgba(5, 5, 5, 0.85); color: var(--rz-fg); border: 1px solid var(--rz-line-2); font-family: var(--rz-font-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; backdrop-filter: blur(8px); }
-.btn:hover { border-color: var(--rz-red); }
+.btn { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; background: none; color: var(--rz-fg); border: 1px solid var(--rz-line); font-family: var(--rz-font-mono); font-size: 0.72rem; letter-spacing: 0.04em; cursor: pointer; transition: background 0.3s, color 0.3s, border-color 0.3s; }
+.btn::before { content: ""; width: 7px; height: 7px; background: var(--rz-red); }
+.btn[aria-pressed="true"]::before { background: var(--rz-mut); }
+.btn:hover { background: #fff; color: #000; border-color: #fff; }
 .btn:focus-visible { outline: 2px solid var(--rz-red); outline-offset: 2px; }
+.short { display: none; }
+@media (max-width: 1000px) { .long { display: none; } .short { display: inline; } .btn { height: 44px; } }

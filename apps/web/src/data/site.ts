@@ -129,6 +129,6 @@ export const meta = {
 };
 
 export const motionToggle = {
-  on: "Activar animaciones",
-  off: "Reducir animaciones",
+  on: { long: "Activar animaciones", short: "Animar" },
+  off: { long: "Reducir animaciones", short: "Quieto" },
 } as const;

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { BrandMark, Button, NavLink } from "@ryzon/ui";
 import { nav, sectionToNav } from "@/data/site";
 import { useActiveSection } from "@/logic/hooks/useActiveSection";
+import { MotionToggle } from "./MotionToggle";
 import s from "./Nav.module.css";
 
 export function Nav() {
@@ -23,10 +24,13 @@ export function Nav() {
         <ul className={s.links}>
           {nav.map((n) => <li key={n.id}><NavLink href={n.href} active={active === n.id}>{n.label}</NavLink></li>)}
         </ul>
-        <a className={s.cta} href="#formulario">Hablemos</a>
-        <button type="button" className={s.burger} aria-expanded={open} aria-controls="menu" aria-label={open ? "Cerrar menú" : "Abrir menú"} onClick={() => setOpen((o) => !o)}>
-          <i /><i />
-        </button>
+        <div className={s.actions}>
+          <MotionToggle />
+          <a className={s.cta} href="#formulario">Hablemos</a>
+          <button type="button" className={s.burger} aria-expanded={open} aria-controls="menu" aria-label={open ? "Cerrar menú" : "Abrir menú"} onClick={() => setOpen((o) => !o)}>
+            <i /><i />
+          </button>
+        </div>
       </header>
       <div id="menu" className={`${s.menu} ${open ? s.open : ""}`}>
         <div>

@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 import { meta } from "@/data/site";
 import { getSiteUrl } from "@/logic/seo/siteUrl";
 import { ColumnLines } from "@/view/layout/ColumnLines";
-import { MotionToggle } from "@/view/layout/MotionToggle";
 import { Cursor } from "@/view/layout/Cursor";
 import { ProgressBar } from "@/view/layout/ProgressBar";
 import { SkipLink } from "@/view/layout/SkipLink";
@@ -43,7 +42,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ProgressBar />
         <Cursor />
         <ColumnLines />
-        <MotionToggle />
         {children}
       </body>
     </html>
