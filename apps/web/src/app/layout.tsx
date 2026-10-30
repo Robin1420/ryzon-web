@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { meta } from "@/data/site";
 import { getSiteUrl } from "@/logic/seo/siteUrl";
 import { ColumnLines } from "@/view/layout/ColumnLines";
+import { MotionToggle } from "@/view/layout/MotionToggle";
 import { Cursor } from "@/view/layout/Cursor";
 import { ProgressBar } from "@/view/layout/ProgressBar";
 import { SkipLink } from "@/view/layout/SkipLink";
@@ -29,8 +30,9 @@ export const viewport: Viewport = { themeColor: "#050505", width: "device-width"
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="es-PE">
+    <html lang="es-PE" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: `try{if(localStorage.getItem("ryzon-motion")==="on")document.documentElement.dataset.motion="on"}catch(e){}` }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}
@@ -41,6 +43,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ProgressBar />
         <Cursor />
         <ColumnLines />
+        <MotionToggle />
         {children}
       </body>
     </html>
