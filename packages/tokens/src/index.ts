@@ -15,12 +15,19 @@ export const breakpoints = {
   small: 760,
 } as const;
 
+/** El visitante puede activar las animaciones aunque su sistema pida reducirlas (`data-motion="on"` en <html>). */
+export const MOTION_KEY = "ryzon-motion";
+const forced = () => typeof document !== "undefined" && document.documentElement.dataset.motion === "on";
+
+/** Se evalúan al usarse (dentro de efectos), por eso son getters y no constantes. */
 export const motion = {
-  reducedQuery: "(prefers-reduced-motion: reduce)",
-  noPreferenceQuery: "(prefers-reduced-motion: no-preference)",
-  fullQuery: `(min-width: ${breakpoints.desktop}px) and (prefers-reduced-motion: no-preference)`,
-  liteQuery: `(max-width: ${breakpoints.desktop - 1}px) and (prefers-reduced-motion: no-preference)`,
+  /** Preferencia real del sistema, sin override. */
+  systemReducedQuery: "(prefers-reduced-motion: reduce)",
+  get reducedQuery() { return forced() ? "not all" : "(prefers-reduced-motion: reduce)"; },
+  get noPreferenceQuery() { return forced() ? "all" : "(prefers-reduced-motion: no-preference)"; },
+  get fullQuery() { return `(min-width: ${breakpoints.desktop}px)${forced() ? "" : " and (prefers-reduced-motion: no-preference)"}`; },
+  get liteQuery() { return `(max-width: ${breakpoints.desktop - 1}px)${forced() ? "" : " and (prefers-reduced-motion: no-preference)"}`; },
   finePointerQuery: "(hover: hover) and (pointer: fine)",
-} as const;
+};
 
 

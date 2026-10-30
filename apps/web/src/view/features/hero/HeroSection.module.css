@@ -16,4 +16,4 @@
 .hint::after { content: ""; position: absolute; left: 0; top: -100%; width: 1px; height: 100%; background: #fff; animation: sh 2.2s infinite cubic-bezier(0.6, 0, 0.3, 1); }
 @keyframes sh { to { top: 100%; } }
 @media (max-width: 1000px) { .row { grid-template-columns: 1fr; gap: 28px; } .areas { display: none; } }
-@media (prefers-reduced-motion: reduce) { .hint::after { animation: none; } }
+@media (prefers-reduced-motion: reduce) { :global(html:not([data-motion="on"])) .hint::after { animation: none; } }
