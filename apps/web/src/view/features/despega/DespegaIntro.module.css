@@ -1,0 +1,10 @@
+.section { padding-block: clamp(80px, 14vh, 170px) clamp(80px, 12vh, 150px); }
+.wrap { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; padding-inline: var(--rz-pad); max-width: var(--rz-max); margin-inline: auto; }
+.label, .credit { grid-column: 1 / -1; }
+.title { grid-column: 1 / 9; font-size: clamp(2.4rem, 6vw, 6rem); }
+.text { grid-column: 1 / 7; }
+.note { grid-column: 1 / 7; }
+.docs { grid-column: 1 / -1; display: grid; gap: 16px; margin-top: 16px; }
+.docsLabel { margin: 0; }
+.buttons { display: flex; flex-wrap: wrap; gap: 16px; }
+@media (max-width: 1000px) { .title, .text, .note { grid-column: 1 / -1; } }

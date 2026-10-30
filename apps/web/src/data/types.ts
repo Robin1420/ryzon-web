@@ -31,3 +31,15 @@ export type Principle = {
 };
 
 export type Faq = { q: string; a: string };
+
+export type LegalSection = { title: string; body: string };
+
+/** Documento legal de una app de Ryzon; `slug` es el último tramo de su dirección. */
+export type LegalDocument = {
+  slug: string;
+  title: string;
+  description: string;
+  /** Fecha de la última actualización, ya escrita para leerse. */
+  updated: string;
+  sections: LegalSection[];
+};

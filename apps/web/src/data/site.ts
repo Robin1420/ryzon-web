@@ -55,10 +55,9 @@ export const contact = {
   accent: ".",
   text: "Explícanos tu necesidad o proyecto con tus propias palabras. No hace falta que sea técnico: te ayudamos a aterrizarlo y a ver por dónde empezar.",
   channels: [
-    { label: "Correo", value: "[correo de contacto]" },
-    { label: "Teléfono", value: "[teléfono]" },
-    { label: "Ubicación", value: "[ciudad]" },
-    { label: "Horario de atención", value: "[horario]" },
+    { label: "Correo", value: "robinzon.1420@gmail.com" },
+    { label: "Teléfono", value: "+51 931 320 429" },
+    { label: "Ubicación", value: "Lima, Perú" },
   ],
 };
 
